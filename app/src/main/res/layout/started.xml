@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/started"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_screen"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".Started">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="550dp"
+        android:fontFamily="@font/font"
+        android:gravity="center"
+        android:text="Welcome\n to TCDQ store"
+        android:textColor="@color/blue"
+        android:textSize="40sp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/goToLogin"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="@font/font"
+        android:padding="10dp"
+        android:text="Get started"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>
