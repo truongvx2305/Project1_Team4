@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login"
+    android:id="@+id/loginLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_screen"
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:text="Welcome back,"
+        android:text="Chào mừng quay trở lại,"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:text="Log In!"
+        android:text="Đăng nhập!"
         android:textColor="@color/white"
         android:textSize="50sp"
         android:textStyle="bold"
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"
-            android:hint="Username"
+            android:hint="Tên tài khoản"
             android:inputType="textEmailAddress"
             tools:ignore="HardcodedText" />
 
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"
-            android:hint="Password"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"
             tools:ignore="HardcodedText" />
 
@@ -71,7 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:text="Remember"
+        android:text="Lưu tên tài khoản"
         android:textSize="15sp"
         tools:ignore="HardcodedText" />
 
@@ -83,7 +83,7 @@
         android:backgroundTint="@color/blue"
         android:fontFamily="@font/font"
         android:padding="10dp"
-        android:text="Log in"
+        android:text="Đăng nhập"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:ignore="HardcodedText" />

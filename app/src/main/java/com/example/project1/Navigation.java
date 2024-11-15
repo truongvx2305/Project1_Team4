@@ -13,10 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.project1.DB.DatabaseHelper;
 import com.example.project1.Dao.UserDao;
 import com.example.project1.Function.Login;
+import com.example.project1.Function.Profile;
 import com.google.android.material.navigation.NavigationView;
 
 public class Navigation extends AppCompatActivity {
@@ -25,9 +28,11 @@ public class Navigation extends AppCompatActivity {
     private UserDao userDao;
     private SharedPreferences sharedPreferences;
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Fragment fragment;
     private String username;
     private TextView toolbarTitle;
-    private NavigationView navigationView;
+
     private static final String PREF_NAME = "user_prefs";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
@@ -37,67 +42,125 @@ public class Navigation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation);
 
+        // Khởi tạo SharedPreferences
+        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+
         // Khởi tạo DatabaseHelper và UserDao
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
         userDao = new UserDao(db);
 
         // Lấy thông tin người dùng từ SharedPreferences
-        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         username = sharedPreferences.getString(KEY_USERNAME, null);
 
         // Khởi tạo các thành phần của giao diện
         toolbarTitle = findViewById(R.id.toolbar_title);
-        drawerLayout = findViewById(R.id.navigation);
+        drawerLayout = findViewById(R.id.navigationLayout);
         setUpToolbar();
 
         // Hiển thị tên người dùng
         navigationView = findViewById(R.id.navigation_view);
-        setupNavigationHeader();
-
-        // Đăng ký sự kiện cho các item trong NavigationView
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.item_logout) {
-                logout();
-                return true;
-            }
-            return false;
-        });
+        if (navigationView != null) {
+            setupNavigationHeader();
+            setUpNavigationView();
+        }
     }
 
     private void setUpToolbar() {
-        ImageButton toolbarButton = findViewById(R.id.action_toolbar);
-        toolbarButton.setOnClickListener(v -> {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        ImageButton drawerToggleButton = findViewById(R.id.action_toolbar);
+        if (drawerToggleButton != null) {
+            drawerToggleButton.setOnClickListener(v -> {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+            });
+        }
     }
 
+    // Hàm xử lý việc gán username khi đăng nhập vào header của NavigationView
     private void setupNavigationHeader() {
         View view = navigationView.getHeaderView(0);
         TextView showUsername = view.findViewById(R.id.showUsername);
         if (username != null) {
             showUsername.setText(username);
+        } else {
+            Toast.makeText(this, "Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+            logout();
         }
     }
 
-    // Hàm xử lý đăng xuất
+    private void setUpNavigationView() {
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    private boolean onNavigationItemSelected(MenuItem menuItem) {
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        fragment = null;
+        String title = "";
+
+        int itemId = menuItem.getItemId();
+
+        if (itemId == R.id.item_profile) {
+            fragment = new Profile();
+            ((Profile) fragment).setUsername(username);
+            title = "Thông tin cá nhân";
+        } else if (itemId == R.id.item_logout) {
+            logout();
+            return true;
+        } else {
+            return false;
+        }
+        if (fragment != null) {
+            loadFragment(fragment, title);
+            updateNavigationViewSelection(fragment);
+        }
+        return true;
+    }
+
+    private void loadFragment(Fragment fragment, String title) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view);
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
+            return; // Không thay thế nếu fragment hiện tại giống với fragment mới
+        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_view, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        toolbarTitle.setText(title);
+    }
+
+    private void updateNavigationViewSelection(Fragment fragment) {
+        MenuItem item = null;
+
+        if (fragment instanceof Profile) {
+            item = navigationView.getMenu().findItem(R.id.item_profile);
+        }
+
+        if (item != null) {
+            item.setChecked(true);
+        }
+    }
+
     private void logout() {
-        // Đặt lại trạng thái đăng nhập thành false
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(KEY_IS_LOGGED_IN, false);
         editor.apply();
 
-        // Thông báo đăng xuất thành công
-        Toast.makeText(this, "Logout successfully", Toast.LENGTH_SHORT).show();
-
-        // Chuyển về màn hình đăng nhập
+        // Chuyển đến màn hình đăng nhập
+        Toast.makeText(this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Navigation.this, Login.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) dbHelper.close();
+        if (db != null && db.isOpen()) db.close();
     }
 }
