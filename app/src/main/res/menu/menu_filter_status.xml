@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/filter_active"
+            android:title="Đi làm"
+            tools:ignore="HardcodedText" />
+        <item
+            android:id="@+id/filter_inactive"
+            android:title="Nghỉ làm"
+            tools:ignore="HardcodedText" />
+    </group>
+    <item
+        android:id="@+id/filter_clear"
+        android:title="Hủy lọc"
+        tools:ignore="HardcodedText" />
+</menu>

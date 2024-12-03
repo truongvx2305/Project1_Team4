@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/headerNavigationLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    android:padding="32dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageHeaderNavigation"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/user1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircularShape"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/showUsernameHeaderNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/font"
+        android:text="USER"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/imageHeaderNavigation"
+        app:layout_constraintTop_toBottomOf="@id/imageHeaderNavigation"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:text="Chào mừng bạn trở lại!"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/showUsernameHeaderNavigation"
+        app:layout_constraintTop_toBottomOf="@id/showUsernameHeaderNavigation"
+        tools:ignore="HardcodedText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
