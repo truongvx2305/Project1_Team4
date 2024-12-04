@@ -202,7 +202,7 @@ public class Navigation extends AppCompatActivity {
         } else if (itemId == R.id.item_discount_management) {
             fragment = new Discount();
             ((Discount) fragment).setUsername(username);
-            title = "Quản lý giảm giá";
+            title = "Quản lý phiếu giảm giá";
         } else if (itemId == R.id.item_employee_management) {
             fragment = new Employee();
             ((Employee) fragment).setUsername(username);
@@ -234,11 +234,11 @@ public class Navigation extends AppCompatActivity {
         } else if (itemId == R.id.item_profile) {
             fragment = new Profile();
             ((Profile) fragment).setUsername(username);
-            title = "Thông tin cá nhân";
+            title = "Quản lý tài khoản";
         } else if (itemId == R.id.item_security) {
             fragment = new SecurityLock();
             ((SecurityLock) fragment).setUsername(username);
-            title = "Khóa bảo mật";
+            title = "Quản lý khóa bảo mật";
         } else if (itemId == R.id.item_logout) {
             logout();
             return true;
