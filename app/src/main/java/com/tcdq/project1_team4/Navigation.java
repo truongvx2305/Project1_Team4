@@ -214,7 +214,7 @@ public class Navigation extends AppCompatActivity {
         } else if (itemId == R.id.item_brand_management) {
             fragment = new Brand();
             ((Brand) fragment).setUsername(username);
-            title = "Quản lý nhãn hàng";
+            title = "Quản lý thương hiệu";
         } else if (itemId == R.id.item_product_management) {
             fragment = new Product();
             ((Product) fragment).setUsername(username);
