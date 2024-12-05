@@ -95,23 +95,8 @@ public class Navigation extends AppCompatActivity {
             setUpNavigationView();
         }
 
-        navigateToHome();
-
         // Tự động mở Navigation View
         drawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    // Mở màn hình Home sau khi đăng nhập thành công
-    private void navigateToHome() {
-        Home homeFragment = new Home();
-        homeFragment.setUsername(username);
-        loadFragment(homeFragment, "Trang chủ");
-
-        // Đặt trạng thái được chọn cho mục "Trang chủ"
-        MenuItem homeItem = navigationView.getMenu().findItem(R.id.item_home);
-        if (homeItem != null) {
-            homeItem.setChecked(true);
-        }
     }
 
     // Thiết lập toolbar và sự kiện click mở navigationView
@@ -200,11 +185,7 @@ public class Navigation extends AppCompatActivity {
 
         int itemId = menuItem.getItemId();
 
-        if (itemId == R.id.item_home) {
-            fragment = new Home();
-            ((Home) fragment).setUsername(username);
-            title = "Trang chủ";
-        } else if (itemId == R.id.item_discount_management) {
+        if (itemId == R.id.item_discount_management) {
             fragment = new Discount();
             ((Discount) fragment).setUsername(username);
             title = "Quản lý phiếu giảm giá";
