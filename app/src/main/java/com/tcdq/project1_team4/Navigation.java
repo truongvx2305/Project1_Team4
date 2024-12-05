@@ -38,7 +38,9 @@ import com.tcdq.project1_team4.Function.SecurityLock;
 import com.tcdq.project1_team4.Model.UserModel;
 import com.google.android.material.navigation.NavigationView;
 
-/** @noinspection ALL*/
+/**
+ * @noinspection ALL
+ */
 public class Navigation extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -94,6 +96,9 @@ public class Navigation extends AppCompatActivity {
         }
 
         navigateToHome();
+
+        // Tự động mở Navigation View
+        drawerLayout.openDrawer(GravityCompat.START);
     }
 
     // Mở màn hình Home sau khi đăng nhập thành công
