@@ -124,6 +124,10 @@ public class Product extends Fragment {
     }
 
     private void setupListeners() {
+        DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        ProductDao productDao = new ProductDao(db);
+
         searchProduct.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -131,17 +135,13 @@ public class Product extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterProducts(s.toString());
+                filterProducts(s.toString(), productDao);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-        productView.setOnItemClickListener((parent, view, position, id) -> {
-            ProductModel product = productList.get(position);
-            showDialogEditProduct(product);
-        });
 
         productView.setOnItemClickListener((parent, view, position, id) -> {
             ProductModel product = productList.get(position);
@@ -149,15 +149,19 @@ public class Product extends Fragment {
         });
     }
 
-    private void filterProducts(String query) {
+    private void filterProducts(String query, ProductDao productDao) {
         List<ProductModel> filteredList = new ArrayList<>();
         for (ProductModel product : originalProductList) {
-            if (TextUtils.isEmpty(query) || product.getName().toLowerCase().contains(query.toLowerCase())) {
+            if (TextUtils.isEmpty(query) ||
+                    product.getName().toLowerCase().contains(query.toLowerCase()) ||
+                    product.getTypeName(productDao).toLowerCase().contains(query.toLowerCase()) ||
+                    product.getBrandName(productDao).toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(product);
             }
         }
         adapter.updateProductList(filteredList);
     }
+
 
     private void showDialogAddProduct() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

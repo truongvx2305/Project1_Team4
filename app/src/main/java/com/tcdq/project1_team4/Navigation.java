@@ -95,8 +95,23 @@ public class Navigation extends AppCompatActivity {
             setUpNavigationView();
         }
 
+        navigateToAccountManagement();
+
         // Tự động mở Navigation View
         drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    // Mở màn hình Home sau khi đăng nhập thành công
+    private void navigateToAccountManagement() {
+        Profile profileFragment = new Profile();
+        profileFragment.setUsername(username);
+        loadFragment(profileFragment, "Quản lý tài khoản");
+
+        // Đặt trạng thái được chọn cho mục "Quản lý tài khoản"
+        MenuItem profileItem = navigationView.getMenu().findItem(R.id.item_profile);
+        if (profileItem != null) {
+            profileItem.setChecked(true);
+        }
     }
 
     // Thiết lập toolbar và sự kiện click mở navigationView

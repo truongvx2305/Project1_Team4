@@ -10,7 +10,9 @@ import com.tcdq.project1_team4.Model.BrandModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL*/
+/**
+ * @noinspection ALL
+ */
 public class BrandDao {
     private final SQLiteDatabase db;
 

@@ -31,6 +31,4 @@ public class BrandModel {
     public void setName(String name) {
         this.name = name;
     }
-
-
 }

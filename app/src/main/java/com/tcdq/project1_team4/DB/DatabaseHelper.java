@@ -64,8 +64,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Xóa bảng nếu tồn tại

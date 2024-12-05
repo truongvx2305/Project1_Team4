@@ -11,8 +11,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/updateImageProfile"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"

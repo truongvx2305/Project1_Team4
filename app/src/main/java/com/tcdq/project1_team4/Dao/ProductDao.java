@@ -160,9 +160,9 @@ public class ProductDao {
     /** @noinspection unused*/ // Lấy tên thương hiệu theo ID
     public String getBrandNameById(int brandId) {
         String brandName = null;
-        Cursor cursor = db.rawQuery("SELECT name FROM brands WHERE id = ?", new String[]{String.valueOf(brandId)});
+        Cursor cursor = db.rawQuery("SELECT Name FROM brand WHERE ID_Brand = ?", new String[]{String.valueOf(brandId)});
         if (cursor != null && cursor.moveToFirst()) {
-            brandName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            brandName = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
             cursor.close();
         }
         return brandName;
@@ -171,9 +171,9 @@ public class ProductDao {
     // Lấy tên loại sản phẩm theo ID
     public String getTypeNameById(int typeId) {
         String typeName = null;
-        Cursor cursor = db.rawQuery("SELECT name FROM product_types WHERE id = ?", new String[]{String.valueOf(typeId)});
+        Cursor cursor = db.rawQuery("SELECT Name FROM product_type WHERE ID_ProductType = ?", new String[]{String.valueOf(typeId)});
         if (cursor != null && cursor.moveToFirst()) {
-            typeName = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            typeName = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
             cursor.close();
         }
         return typeName;
@@ -183,7 +183,7 @@ public class ProductDao {
     public boolean updateProductImage(int productId, byte[] imageBytes) {
         ContentValues values = new ContentValues();
         values.put("image", imageBytes);
-        int rows = db.update("product", values, "id = ?", new String[]{String.valueOf(productId)});
+        int rows = db.update("product", values, "ID_Product = ?", new String[]{String.valueOf(productId)});
         return rows > 0;
     }
 }

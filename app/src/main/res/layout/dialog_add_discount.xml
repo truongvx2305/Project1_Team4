@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/font"
-                    android:text="Giá đơn hàng:"
+                    android:text="Giá hóa đơn:"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
@@ -64,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font"
-                    android:hint="Nhập giá đơn hàng tối thiểu"
+                    android:hint="Nhập giá hóa đơn tối thiểu"
                     tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
 
                 <TextView

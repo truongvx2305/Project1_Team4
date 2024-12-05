@@ -2,7 +2,9 @@ package com.tcdq.project1_team4.Model;
 
 import com.tcdq.project1_team4.Dao.ProductDao;
 
-/** @noinspection ALL*/
+/**
+ * @noinspection ALL
+ */
 public class ProductModel {
     private int id;
     private byte[] image;
@@ -51,21 +53,9 @@ public class ProductModel {
         return idProductType;
     }
 
-// --Commented out by Inspection START (12/3/2024 6:07 PM):
-//    public void setIdProductType(int idProductType) {
-//        this.idProductType = idProductType;
-//    }
-// --Commented out by Inspection STOP (12/3/2024 6:07 PM)
-
     public int getIdBrand() {
         return idBrand;
     }
-
-// --Commented out by Inspection START (12/3/2024 6:07 PM):
-//    public void setIdBrand(int idBrand) {
-//        this.idBrand = idBrand;
-//    }
-// --Commented out by Inspection STOP (12/3/2024 6:07 PM)
 
     // Cập nhật loại sản phẩm với ID từ Spinnerz
     public void setType(int idProductType) {
@@ -77,16 +67,11 @@ public class ProductModel {
         this.idBrand = idBrand;
     }
 
-// --Commented out by Inspection START (12/3/2024 6:07 PM):
-//    public String getBrandName(ProductDao productDao) {
-// --Commented out by Inspection START (12/3/2024 6:07 PM):
-////        return productDao.getBrandNameById(this.idBrand);
-////    }
-//// --Commented out by Inspection STOP (12/3/2024 6:07 PM)
-//
-//    // Thêm phương thức để lấy tên loại sản phẩm
-// --Commented out by Inspection STOP (12/3/2024 6:07 PM)
     public String getTypeName(ProductDao productDao) {
         return productDao.getTypeNameById(this.idProductType);
+    }
+
+    public String getBrandName(ProductDao productDao) {
+        return productDao.getBrandNameById(this.idBrand);
     }
 }
