@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.ColorDao;
@@ -22,7 +23,9 @@ import com.tcdq.project1_team4.R;
 
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class WarehouseAdapter extends BaseAdapter {
     private final Context context;
     private List<WarehouseModel> warehouseList;
@@ -96,14 +99,19 @@ public class WarehouseAdapter extends BaseAdapter {
         if (quantity < 10) {
             errorProductWarehouse.setColorFilter(context.getResources().getColor(R.color.red)); // Đổi màu thành đỏ
             errorProductWarehouse.setVisibility(View.VISIBLE);
+
+            // Xử lý khi nhấn vào biểu tượng lỗi
+            errorProductWarehouse.setOnClickListener(v -> {
+                Toast.makeText(context, "Sản phẩm còn ít. Vui lòng nhập thêm số lượng!", Toast.LENGTH_SHORT).show();
+            });
         } else {
             errorProductWarehouse.setVisibility(View.GONE);
         }
 
         if (quantity == 0) {
-            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.gray)); // Màu trắng // Đổi màu nền thành xám
+            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.gray)); // Đổi màu nền thành xám
         } else {
-            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.white)); // Màu trắng // Màu nền mặc định
+            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.white)); // Màu nền mặc định
         }
 
         return convertView;

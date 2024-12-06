@@ -320,12 +320,20 @@ public class WarehouseDao {
                 // Sản phẩm đã tồn tại, cập nhật số lượng và thông tin
                 int currentQuantity = cursor.getInt(cursor.getColumnIndexOrThrow("Quantity"));
 
+                // Cập nhật số lượng mới
+                int newQuantity = currentQuantity + warehouse.getQuantity();
+
+                // Kiểm tra số lượng để quyết định trạng thái still
+                boolean isStill = newQuantity > 0;
+
+                // Tạo đối tượng ContentValues để cập nhật
                 ContentValues values = new ContentValues();
                 values.put("Image", warehouse.getImage());
-                values.put("Quantity", currentQuantity + warehouse.getQuantity());
+                values.put("Quantity", newQuantity);
                 values.put("Entry_Date", warehouse.getEntryDate());
                 values.put("Entry_Price", warehouse.getEntryPrice());
                 values.put("Exit_Price", warehouse.getExitPrice());
+                values.put("isStill", isStill ? 1 : 0);  // Cập nhật trạng thái still
 
                 int rows = db.update(
                         "warehouse",
@@ -355,7 +363,7 @@ public class WarehouseDao {
                 values.put("Entry_Date", warehouse.getEntryDate());
                 values.put("Entry_Price", warehouse.getEntryPrice());
                 values.put("Exit_Price", warehouse.getExitPrice());
-                values.put("isStill", warehouse.isStill() ? 1 : 0);
+                values.put("isStill", warehouse.getQuantity() > 0 ? 1 : 0);  // Cập nhật trạng thái still
 
                 long result = db.insert("warehouse", null, values);
                 if (result != -1) {
@@ -375,5 +383,4 @@ public class WarehouseDao {
             }
         }
     }
-
 }

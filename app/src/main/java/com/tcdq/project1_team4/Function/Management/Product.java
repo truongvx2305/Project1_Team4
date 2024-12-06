@@ -1,7 +1,6 @@
 package com.tcdq.project1_team4.Function.Management;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -41,7 +40,6 @@ public class Product extends Fragment {
     private ListView productView;
     private EditText searchProduct;
     private TextView emptyTextView;
-    private Bitmap selectedImageBitmap;
     private String username;
 
     public void setUsername(String username) {
@@ -188,11 +186,6 @@ public class Product extends Fragment {
 
             if (TextUtils.isEmpty(name)) {
                 nameField.setError("Tên sản phẩm không được để trống!");
-                return;
-            }
-
-            if (selectedImageBitmap == null) {
-                Toast.makeText(getContext(), "Vui lòng chọn ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
