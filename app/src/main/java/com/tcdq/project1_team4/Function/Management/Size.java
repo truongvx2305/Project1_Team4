@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class Size extends Fragment {
     private final List<SizeModel> originalSizeList = new ArrayList<>(); // Danh sách gốc
     private final List<SizeModel> sizeList = new ArrayList<>(); // Danh sách hiển thị
@@ -154,7 +156,11 @@ public class Size extends Fragment {
 
     private boolean validateInput(EditText nameField, String name) {
         if (TextUtils.isEmpty(name)) {
-            nameField.setError("Vui lòng nhập kích cỡ!");
+            Toast.makeText(getContext(), "Vui lòng nhập tên kích cỡ!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (originalSizeList.stream().anyMatch(size -> size.getSizeName().equalsIgnoreCase(name))) {
+            Toast.makeText(getContext(), "Tên kích cỡ đã tồn tại!", Toast.LENGTH_SHORT).show();
             return false;
         }
 

@@ -186,4 +186,41 @@ public class ProductDao {
         int rows = db.update("product", values, "ID_Product = ?", new String[]{String.valueOf(productId)});
         return rows > 0;
     }
+
+    public int getProductCountByTypeId(int typeId) {
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) AS Count FROM product WHERE ID_ProductType = ?", new String[]{String.valueOf(typeId)});
+            if (cursor != null && cursor.moveToFirst()) {
+                count = cursor.getInt(cursor.getColumnIndexOrThrow("Count"));
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error in getProductCountByTypeId", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return count;
+    }
+
+    public int getProductCountByBrandId(int brandId) {
+        int count = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) AS Count FROM product WHERE ID_Brand = ?", new String[]{String.valueOf(brandId)});
+            if (cursor != null && cursor.moveToFirst()) {
+                count = cursor.getInt(cursor.getColumnIndexOrThrow("Count"));
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error in getProductCountByBrandId", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return count;
+    }
+
 }

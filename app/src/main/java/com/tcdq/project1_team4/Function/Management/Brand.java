@@ -21,7 +21,10 @@ import androidx.fragment.app.Fragment;
 import com.tcdq.project1_team4.Adapter.BrandAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.BrandDao;
+import com.tcdq.project1_team4.Dao.ProductDao;
+import com.tcdq.project1_team4.Dao.TypeDao;
 import com.tcdq.project1_team4.Model.BrandModel;
+import com.tcdq.project1_team4.Model.TypeModel;
 import com.tcdq.project1_team4.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -29,7 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class Brand extends Fragment {
     private String username;
     private final List<BrandModel> originalBrandList = new ArrayList<>(); // Danh sách gốc
@@ -98,7 +103,7 @@ public class Brand extends Fragment {
 
         brandView.setOnItemClickListener((parent, view, position, id) -> {
             BrandModel selectedBrand = brandList.get(position);
-            showUpdateBrandDialog(selectedBrand);
+            showDeleteBrandDialog(selectedBrand);
         });
     }
 
@@ -140,10 +145,10 @@ public class Brand extends Fragment {
                     if (brandDao.insert(newBrand)) {
                         originalBrandList.add(newBrand);
                         filterBrandByName(searchBrand.getText().toString());
-                        Toast.makeText(getContext(), "Thêm nhãn hàng thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Thêm thương hiệu thành công!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Lỗi khi thêm nhãn hàng!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Lỗi khi thêm thương hiệu!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -154,44 +159,41 @@ public class Brand extends Fragment {
 
     private boolean validateInput(EditText nameField, String name) {
         if (TextUtils.isEmpty(name)) {
-            nameField.setError("Vui lòng nhập tên nhãn hàng!");
+            Toast.makeText(getContext(), "Vui lòng nhập tên thương hiệu!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (originalBrandList.stream().anyMatch(brand -> brand.getName().equalsIgnoreCase(name))) {
+            Toast.makeText(getContext(), "Tên thương hiệu đã tồn tại!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    private void showUpdateBrandDialog(BrandModel brand) {
+    private void showDeleteBrandDialog(BrandModel brand) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_brand, null);
-        builder.setView(dialogView);
+        builder.setTitle("Xóa thương hiệu")
+                .setMessage("Bạn có chắc chắn muốn xóa thương hiệu \"" + brand.getName() + "\" ?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ProductDao productDao = new ProductDao(db);
 
-        EditText nameField = dialogView.findViewById(R.id.nameUpdateBrand);
-        nameField.setText(brand.getName());
-
-        builder.setPositiveButton("Cập nhật", null);
-        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(dialogInterface -> {
-            Button updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            updateButton.setOnClickListener(v -> {
-                String newName = nameField.getText().toString().trim();
-
-                if (validateInput(nameField, newName)) {
-                    brand.setName(newName);
-
-                    BrandDao brandDao = new BrandDao(new DatabaseHelper(getContext()).getWritableDatabase());
-                    if (brandDao.updateBrand(brand)) {
-                        loadData();
-                        Toast.makeText(getContext(), "Cập nhật nhãn hàng thành công!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                    // Kiểm tra loại sản phẩm đã được dùng trong bảng sản phẩm chưa
+                    int productCount = productDao.getProductCountByBrandId(brand.getIdBrand());
+                    if (productCount > 0) {
+                        Toast.makeText(getContext(), "Không thể xóa! Thương hiệu này đang được sử dụng!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Lỗi khi cập nhật!", Toast.LENGTH_SHORT).show();
+                        BrandDao brandDao = new BrandDao(db);
+                        if (brandDao.delete(brand.getIdBrand())) {
+                            originalBrandList.remove(brand); // Cập nhật danh sách gốc
+                            filterBrandByName(searchBrand.getText().toString()); // Cập nhật hiển thị
+                            Toast.makeText(getContext(), "Xóa thành công!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Lỗi khi xóa thương hiệu!", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
-        });
-
-        dialog.show();
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.tcdq.project1_team4.Adapter.TypeAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
+import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.TypeDao;
 import com.tcdq.project1_team4.Model.TypeModel;
 import com.tcdq.project1_team4.R;
@@ -29,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class Type extends Fragment {
     private String username;
     private final List<TypeModel> originalTypeList = new ArrayList<>(); // Danh sách gốc
@@ -98,7 +101,7 @@ public class Type extends Fragment {
 
         typeView.setOnItemClickListener((parent, view, position, id) -> {
             TypeModel selectedType = typeList.get(position);
-            showUpdateTypeDialog(selectedType);
+            showDeleteTypeDialog(selectedType);
         });
     }
 
@@ -155,44 +158,41 @@ public class Type extends Fragment {
 
     private boolean validateInput(EditText nameField, String name) {
         if (TextUtils.isEmpty(name)) {
-            nameField.setError("Vui lòng nhập tên loại hàng!");
+            Toast.makeText(getContext(), "Vui lòng nhập tên loại sản phẩm!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (originalTypeList.stream().anyMatch(type -> type.getTypeName().equalsIgnoreCase(name))) {
+            Toast.makeText(getContext(), "Tên loại sản phẩm đã tồn tại!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
 
-    private void showUpdateTypeDialog(TypeModel type) {
+    private void showDeleteTypeDialog(TypeModel type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_type, null);
-        builder.setView(dialogView);
+        builder.setTitle("Xóa loại sản phẩm")
+                .setMessage("Bạn có chắc chắn muốn xóa loại sản phẩm \"" + type.getTypeName() + "\" ?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ProductDao productDao = new ProductDao(db);
 
-        EditText nameField = dialogView.findViewById(R.id.nameUpdateType);
-        nameField.setText(type.getTypeName());
-
-        builder.setPositiveButton("Cập nhật", null);
-        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(dialogInterface -> {
-            Button updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            updateButton.setOnClickListener(v -> {
-                String newName = nameField.getText().toString().trim();
-
-                if (validateInput(nameField, newName)) {
-                    type.setTypeName(newName);
-
-                    TypeDao typeDao = new TypeDao(new DatabaseHelper(getContext()).getWritableDatabase());
-                    if (typeDao.updateType(type)) {
-                        loadData(); // Tải lại danh sách
-                        Toast.makeText(getContext(), "Cập nhật loại hàng thành công!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                    // Kiểm tra loại sản phẩm đã được dùng trong bảng sản phẩm chưa
+                    int productCount = productDao.getProductCountByTypeId(type.getIdType());
+                    if (productCount > 0) {
+                        Toast.makeText(getContext(), "Không thể xóa! Loại này đang được sử dụng!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Lỗi khi cập nhật!", Toast.LENGTH_SHORT).show();
+                        TypeDao typeDao = new TypeDao(db);
+                        if (typeDao.delete(type.getIdType())) {
+                            originalTypeList.remove(type); // Cập nhật danh sách gốc
+                            filterTypeByName(searchType.getText().toString()); // Cập nhật hiển thị
+                            Toast.makeText(getContext(), "Xóa thành công!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Lỗi khi xóa loại sản phẩm!", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            });
-        });
-
-        dialog.show();
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

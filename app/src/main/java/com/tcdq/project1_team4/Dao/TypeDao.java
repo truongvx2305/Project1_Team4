@@ -55,9 +55,9 @@ public class TypeDao {
     }
 
     // Xóa
-    public boolean delete(String name) {
-        int result = db.delete("product_type", "Name = ?", new String[]{name});
-        return result > 0;
+    public boolean delete(int typeId) {
+        int rows = db.delete("product_type", "ID_ProductType = ?", new String[]{String.valueOf(typeId)});
+        return rows > 0;
     }
 
     // 2. Các phương thức kiểm tra dữ liệu

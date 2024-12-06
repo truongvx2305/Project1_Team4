@@ -58,9 +58,9 @@ public class BrandDao {
     }
 
     // Xóa
-    public boolean delete(String name) {
-        int result = db.delete("brand", "Name = ?", new String[]{name});
-        return result > 0;
+    public boolean delete(int brandId) {
+        int rows = db.delete("brand", "ID_Brand = ?", new String[]{String.valueOf(brandId)});
+        return rows > 0;
     }
 
     // 2. Các phương thức kiểm tra dữ liệu

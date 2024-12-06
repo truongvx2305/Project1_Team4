@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class Color extends Fragment {
     private String username;
     private final List<ColorModel> originalColorList = new ArrayList<>(); // Danh sách gốc
@@ -154,9 +156,14 @@ public class Color extends Fragment {
 
     private boolean validateInput(EditText nameField, String name) {
         if (TextUtils.isEmpty(name)) {
-            nameField.setError("Vui lòng nhập tên màu sắc!");
+            Toast.makeText(getContext(), "Vui lòng nhập tên màu!", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (originalColorList.stream().anyMatch(color -> color.getColorName().equalsIgnoreCase(name))) {
+            Toast.makeText(getContext(), "Tên màu đã tồn tại!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
