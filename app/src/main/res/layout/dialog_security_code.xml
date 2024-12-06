@@ -1,40 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/securityCodeDialog"
+    android:id="@+id/dialogSecurityCode"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Security Message -->
     <TextView
         android:id="@+id/securityMessageDialog"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:gravity="center"
         android:paddingBottom="8dp"
         android:text="Nhập mã bảo mật để tiếp tục:"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
+    <!-- Security Code Input -->
     <EditText
         android:id="@+id/edt_securityCodeDialog"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:hint="Mã bảo mật"
         android:inputType="numberPassword"
         android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintMarginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/securityMessageDialog"
         tools:ignore="Autofill,HardcodedText" />
 
+    <!-- Submit Button -->
     <Button
         android:id="@+id/btn_submitSecurity"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/blue"
         android:fontFamily="@font/font"
         android:text="Xác nhận"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_securityCodeDialog"
         tools:ignore="HardcodedText" />
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

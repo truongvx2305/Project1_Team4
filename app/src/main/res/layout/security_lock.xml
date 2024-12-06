@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:hint="Mã bảo mật 1"
+        android:hint="Mã bảo mật cũ/mã bảo mật mới"
         android:inputType="numberPassword"
         android:padding="8dp"
         tools:ignore="Autofill,HardcodedText" />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
-        android:hint="Mã bảo mật 2"
+        android:hint="Mã bảo mật mới/xác nhận mã bảo mật"
         android:inputType="numberPassword"
         android:padding="8dp"
         tools:ignore="Autofill,HardcodedText" />
