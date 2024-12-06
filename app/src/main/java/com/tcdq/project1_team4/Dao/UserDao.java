@@ -10,7 +10,9 @@ import com.tcdq.project1_team4.Model.UserModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class UserDao {
     private final SQLiteDatabase db;
 
@@ -44,11 +46,11 @@ public class UserDao {
     }
 
     // Cập nhật mật khẩu
-    public boolean updatePassword(UserModel user, String newPassword) {
+    public boolean updatePassword(String username, String newPassword) {
         ContentValues values = new ContentValues();
         values.put("Password", newPassword);
         try {
-            int result = db.update("user", values, "Username = ?", new String[]{user.getUsername()});
+            int result = db.update("user", values, "Username = ?", new String[]{username});
             return result > 0;
         } catch (SQLException e) {
             e.printStackTrace();

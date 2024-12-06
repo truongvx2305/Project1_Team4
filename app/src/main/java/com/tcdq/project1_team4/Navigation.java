@@ -35,6 +35,7 @@ import com.tcdq.project1_team4.Function.Management.Size;
 import com.tcdq.project1_team4.Function.Management.Type;
 import com.tcdq.project1_team4.Function.Profile;
 import com.tcdq.project1_team4.Function.SecurityLock;
+import com.tcdq.project1_team4.Function.UpdatePassword;
 import com.tcdq.project1_team4.Model.UserModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -240,6 +241,10 @@ public class Navigation extends AppCompatActivity {
             fragment = new SecurityLock();
             ((SecurityLock) fragment).setUsername(username);
             title = "Quản lý khóa bảo mật";
+        } else if (itemId == R.id.item_update_password) {
+            fragment = new UpdatePassword();
+            ((UpdatePassword) fragment).setUsername(username);
+            title = "Đổi mật khẩu";
         } else if (itemId == R.id.item_logout) {
             logout();
             return true;
