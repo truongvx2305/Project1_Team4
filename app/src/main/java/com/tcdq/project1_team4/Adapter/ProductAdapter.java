@@ -70,15 +70,6 @@ public class ProductAdapter extends BaseAdapter {
         tvType.setText("Loại: " + typeDao.getTypeNameById(product.getIdProductType()));
         tvBrand.setText("Thương hiệu: " + brandDao.getBrandNameById(product.getIdBrand()));
 
-//        // Hiển thị ảnh sản phẩm
-//        byte[] imageBytes = product.getImage();
-//        if (imageBytes != null) {
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-//            imgProduct.setImageBitmap(bitmap);
-//        } else {
-//            imgProduct.setImageResource(R.drawable.type); // Ảnh mặc định
-//        }
-
         return convertView;
     }
 

@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String warehouseTable = "warehouse";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 40);
+        super(context, DATABASE_NAME, null, 42);
     }
 
     @Override
@@ -302,6 +302,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues color2 = new ContentValues();
         color2.put("Name", "Xanh");
         db.insert(colorTable, null, color2);
+
+        ContentValues color3 = new ContentValues();
+        color3.put("Name", "Trắng");
+        db.insert(colorTable, null, color3);
     }
 
     private void insertProduct(SQLiteDatabase db) {
@@ -317,8 +321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void insertWarehouse(SQLiteDatabase db) {
         ContentValues warehouse = new ContentValues();
         warehouse.put("ID_Product", 1);
-        warehouse.put("ID_Color", 1);
-        warehouse.put("ID_Size", 1);
+        warehouse.put("ID_Color", 3);
+        warehouse.put("ID_Size", 4);
         warehouse.put("Quantity", 10);
         warehouse.put("Entry_Date", "2024-12-6");
         warehouse.put("Entry_Price", 100000);
@@ -331,8 +335,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void insertWarehouse2(SQLiteDatabase db) {
         ContentValues warehouse = new ContentValues();
         warehouse.put("ID_Product", 1);
-        warehouse.put("ID_Color", 2);
-        warehouse.put("ID_Size", 2);
+        warehouse.put("ID_Color", 3);
+        warehouse.put("ID_Size", 3);
         warehouse.put("Quantity", 0);
         warehouse.put("Entry_Date", "2023-12-6");
         warehouse.put("Entry_Price", 100000);

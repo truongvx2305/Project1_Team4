@@ -16,7 +16,9 @@ import com.tcdq.project1_team4.Model.WarehouseModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class WarehouseDao {
     private final SQLiteDatabase db;
 
@@ -297,6 +299,81 @@ public class WarehouseDao {
             }
         }
         return result;
+    }
+
+    public boolean insertOrUpdateProduct(WarehouseModel warehouse) {
+        if (warehouse == null) {
+            Log.e("InsertOrUpdate", "Warehouse data is null.");
+            return false;
+        }
+
+        Cursor cursor = db.rawQuery(
+                "SELECT ID_Product, Quantity FROM warehouse WHERE ID_Product = ? AND ID_Color = ? AND ID_Size = ?",
+                new String[]{
+                        String.valueOf(warehouse.getIdProduct()),
+                        String.valueOf(warehouse.getIdColor()),
+                        String.valueOf(warehouse.getIdSize())
+                });
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                // Sản phẩm đã tồn tại, cập nhật số lượng và thông tin
+                int currentQuantity = cursor.getInt(cursor.getColumnIndexOrThrow("Quantity"));
+
+                ContentValues values = new ContentValues();
+                values.put("Image", warehouse.getImage());
+                values.put("Quantity", currentQuantity + warehouse.getQuantity());
+                values.put("Entry_Date", warehouse.getEntryDate());
+                values.put("Entry_Price", warehouse.getEntryPrice());
+                values.put("Exit_Price", warehouse.getExitPrice());
+
+                int rows = db.update(
+                        "warehouse",
+                        values,
+                        "ID_Product = ? AND ID_Color = ? AND ID_Size = ?",
+                        new String[]{
+                                String.valueOf(warehouse.getIdProduct()),
+                                String.valueOf(warehouse.getIdColor()),
+                                String.valueOf(warehouse.getIdSize())
+                        });
+
+                if (rows > 0) {
+                    Log.d("InsertOrUpdate", "Updated existing product successfully.");
+                    return true;
+                } else {
+                    Log.e("InsertOrUpdate", "Failed to update existing product.");
+                    return false;
+                }
+            } else {
+                // Sản phẩm chưa tồn tại, thêm mới
+                ContentValues values = new ContentValues();
+                values.put("ID_Product", warehouse.getIdProduct());
+                values.put("Image", warehouse.getImage());
+                values.put("ID_Color", warehouse.getIdColor());
+                values.put("ID_Size", warehouse.getIdSize());
+                values.put("Quantity", warehouse.getQuantity());
+                values.put("Entry_Date", warehouse.getEntryDate());
+                values.put("Entry_Price", warehouse.getEntryPrice());
+                values.put("Exit_Price", warehouse.getExitPrice());
+                values.put("isStill", warehouse.isStill() ? 1 : 0);
+
+                long result = db.insert("warehouse", null, values);
+                if (result != -1) {
+                    Log.d("InsertOrUpdate", "Inserted new product successfully.");
+                    return true;
+                } else {
+                    Log.e("InsertOrUpdate", "Failed to insert new product.");
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("DatabaseError", "Error in insertOrUpdateProduct", e);
+            return false;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tcdq.project1_team4.DB.DatabaseHelper;
@@ -70,25 +71,40 @@ public class WarehouseAdapter extends BaseAdapter {
         TextView tvExitPrice = convertView.findViewById(R.id.exitPriceProductWarehouse);
         TextView tvQuantity = convertView.findViewById(R.id.quantityProductWarehouse);
         TextView tvStatus = convertView.findViewById(R.id.statusProductWarehouse);
+        ImageView errorProductWarehouse = convertView.findViewById(R.id.errorProductWarehouse);
+        LinearLayout linearLayoutWarehouse = convertView.findViewById(R.id.linearLayoutWarehouse);
 
         // Hiển thị thông tin sản phẩm
-        // Hiển thị ảnh sản phẩm
         byte[] imageBytes = product.getImage();
         if (imageBytes != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
             imgProduct.setImageBitmap(bitmap);
         } else {
-            imgProduct.setImageResource(R.drawable.type); // Ảnh mặc định
+            imgProduct.setImageResource(R.drawable.type);
         }
 
-        // Hiển thị các thông tin khác
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(context).getReadableDatabase());
-        tvName.setText(warehouseDao.getNameById(product.getIdProduct()));
+        tvName.setText("Tên sản phẩm: " + warehouseDao.getNameById(product.getIdProduct()));
         tvColor.setText("Màu: " + warehouseDao.getColorNameById(product.getIdColor()));
         tvSize.setText("Kích cỡ: " + warehouseDao.getSizeNameById(product.getIdSize()));
         tvExitPrice.setText("Giá xuất: " + product.getExitPrice() + " đ");
         tvQuantity.setText("Số lượng: " + product.getQuantity());
-        tvStatus.setText("Trạng thái: " + (product.isStill() ? "Còn hàng" : "Hết hàng"));
+        tvStatus.setText("Trạng thái: " + (product.getStatus()));
+
+        // Kiểm tra số lượng và thay đổi giao diện
+        int quantity = product.getQuantity();
+        if (quantity < 10) {
+            errorProductWarehouse.setColorFilter(context.getResources().getColor(R.color.red)); // Đổi màu thành đỏ
+            errorProductWarehouse.setVisibility(View.VISIBLE);
+        } else {
+            errorProductWarehouse.setVisibility(View.GONE);
+        }
+
+        if (quantity == 0) {
+            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.gray)); // Màu trắng // Đổi màu nền thành xám
+        } else {
+            linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.white)); // Màu trắng // Màu nền mặc định
+        }
 
         return convertView;
     }
@@ -98,5 +114,4 @@ public class WarehouseAdapter extends BaseAdapter {
         this.warehouseList = newList;
         notifyDataSetChanged(); // Cập nhật lại giao diện
     }
-
 }

@@ -40,18 +40,27 @@ import com.tcdq.project1_team4.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL, unused , unused , unused , unused
+ */
 public class Warehouse extends Fragment {
     private final List<WarehouseModel> originalWarehouseList = new ArrayList<>();
     private final List<WarehouseModel> warehouseList = new ArrayList<>();
     private WarehouseAdapter adapter;
     private ListView warehouseView;
     private EditText searchWarehouse;
+    /**
+     * @noinspection unused
+     */
     private TextView emptyTextView;
     private Bitmap selectedImageBitmap;
     private ImageView updateImageProduct;
+    /**
+     * @noinspection unused
+     */
     private String username;
 
     public void setUsername(String username) {
@@ -100,8 +109,11 @@ public class Warehouse extends Fragment {
         btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
     }
 
-    /** @noinspection resource*/
+    /**
+     * @noinspection resource
+     */
     private void loadData() {
+        //noinspection resource
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         WarehouseDao warehouseDao = new WarehouseDao(db);
@@ -122,7 +134,11 @@ public class Warehouse extends Fragment {
         warehouseView.setAdapter(adapter);
     }
 
+    /**
+     * @noinspection resource, unused
+     */
     private void setupListeners() {
+        //noinspection resource
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         WarehouseDao warehouseDao = new WarehouseDao(db);
@@ -160,7 +176,11 @@ public class Warehouse extends Fragment {
         adapter.updateProductList(filteredList);
     }
 
+    /**
+     * @noinspection resource, resource , DataFlowIssue
+     */
     private void showDialogAddProduct() {
+        //noinspection DataFlowIssue
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_warehouse, null);
         builder.setView(dialogView);
@@ -178,6 +198,7 @@ public class Warehouse extends Fragment {
         selectedImageBitmap = null;
         updateImageProduct.setImageResource(R.drawable.type);
 
+        //noinspection resource
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());
         ArrayAdapter<String> nameAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, warehouseDao.getAllName());
         ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, warehouseDao.getAllColor());
@@ -240,12 +261,50 @@ public class Warehouse extends Fragment {
                 return;
             }
 
-            // Xử lý thêm sản phẩm
+            if (selectedImageBitmap == null) {
+                Toast.makeText(getContext(), "Vui lòng chọn ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            //noinspection resource
+            WarehouseDao warehouseWrite = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            int productId = warehouseWrite.getProductIdByName(selectedName);
+            int colorId = warehouseWrite.getColorIdByName(selectedColor);
+            int sizeId = warehouseWrite.getSizeIdByName(selectedSize);
+
+            if (productId == -1 || colorId == -1 || sizeId == -1) {
+                Toast.makeText(getContext(), "Tên, màu sắc hoặc kích thước sản phẩm không hợp lệ!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            WarehouseModel newProduct = new WarehouseModel();
+            newProduct.setIdProduct(productId);
+            newProduct.setImage(convertBitmapToByteArray(selectedImageBitmap));
+            newProduct.setIdColor(colorId);
+            newProduct.setIdSize(sizeId);
+            newProduct.setQuantity(Integer.parseInt(quantity));
+            newProduct.setEntryPrice(Float.parseFloat(entryPrice));
+            newProduct.setExitPrice(Float.parseFloat(exitPrice));
+            newProduct.setEntryDate(new Date().toString()); // Lấy ngày thêm hiện tại
+            newProduct.setStill(true);
+
+            if (warehouseWrite.insertOrUpdateProduct(newProduct)) {
+                selectedImageBitmap = null; // Reset sau khi thêm/cập nhật thành công
+                loadData();
+                Toast.makeText(getContext(), "Thêm hoặc cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+            } else {
+                selectedImageBitmap = null; // Reset ngay cả khi thất bại
+                Toast.makeText(getContext(), "Thêm hoặc cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+            }
         });
+
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
+    /**
+     * @noinspection unused
+     */
     private Bitmap convertByteArrayToBitmap(byte[] byteArray) {
         if (byteArray != null) {
             return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
