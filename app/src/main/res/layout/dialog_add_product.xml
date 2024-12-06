@@ -1,113 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogAddProductLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Container with background and elevation -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        tools:ignore="UselessParent">
+        android:background="#FFFFFF"
+        android:elevation="10dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Product Image -->
+        <ImageView
+            android:id="@+id/productImageAdd"
+            android:layout_width="80dp"
+            android:layout_height="86dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="Profile Picture"
+            android:scaleType="centerCrop"
+            android:src="@drawable/type"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,ImageContrastCheck" />
+
+        <!-- Product Name -->
+        <TextView
+            android:id="@+id/productNameLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFFFF"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            tools:ignore="UselessParent">
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font"
+            android:text="Sản Phẩm:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/productImageAdd"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
-            <ImageView
-                android:id="@+id/productImageAdd"
-                android:layout_width="80dp"
-                android:layout_height="86dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="Profile Picture"
-                android:scaleType="centerCrop"
-                android:src="@drawable/type"
-                tools:ignore="HardcodedText,ImageContrastCheck" />
+        <EditText
+            android:id="@+id/nameProductAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font"
+            android:hint="Nhập tên sản phẩm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/productImageAdd"
+            app:layout_constraintTop_toBottomOf="@id/productNameLabel"
+            tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutProduct"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="10dp"
-                tools:ignore="RtlSymmetry">
+        <!-- Type Row -->
+        <TextView
+            android:id="@+id/typeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font"
+            android:text="Loại:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/productImageAdd"
+            app:layout_constraintTop_toBottomOf="@id/nameProductAdd"
+            tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:text="Sản Phẩm:"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+        <Spinner
+            android:id="@+id/typeProductSp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/typeLabel"
+            app:layout_constraintTop_toTopOf="@id/typeLabel"
+            tools:ignore="TouchTargetSizeCheck" />
 
-                <EditText
-                    android:id="@+id/nameProductAdd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:hint="Nhập tên sản phẩm"
-                    tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
+        <!-- Brand Row -->
+        <TextView
+            android:id="@+id/brandLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font"
+            android:text="Thương hiệu:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/productImageAdd"
+            app:layout_constraintTop_toBottomOf="@id/typeProductSp"
+            tools:ignore="HardcodedText" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/brandProductSp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/brandLabel"
+            app:layout_constraintTop_toTopOf="@id/brandLabel"
+            tools:ignore="TouchTargetSizeCheck" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/font"
-                        android:text="Loại:"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <Spinner
-                        android:id="@+id/typeProductSp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:ignore="TouchTargetSizeCheck" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/font"
-                        android:text="Thương hiệu:"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                    <Spinner
-                        android:id="@+id/brandProductSp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:ignore="TouchTargetSizeCheck" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,10 +39,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"
+            android:hint="Nhập tên khách hàng"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/customerNameLabel"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+            tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
 
         <!-- TextView: Số điện thoại -->
         <TextView
@@ -64,10 +65,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"
+            android:hint="Nhập số điện thoại khách hàng"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/customerPhoneLabel"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+            tools:ignore="Autofill,HardcodedText,TextFields" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

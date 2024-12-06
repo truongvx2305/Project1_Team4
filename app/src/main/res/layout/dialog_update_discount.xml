@@ -1,90 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogUpdateDiscountLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:padding="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Container with background and elevation -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:background="#FFFFFF"
+        android:elevation="10dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Giá hóa đơn -->
+        <TextView
+            android:id="@+id/minPriceLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="#FFFFFF"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            tools:ignore="DisableBaselineAlignment,UselessParent">
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font"
+            android:text="Giá hóa đơn:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="10dp"
-                tools:ignore="RtlSymmetry">
+        <EditText
+            android:id="@+id/minPriceUpdateDiscount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font"
+            android:hint="Nhập giá hóa đơn tối thiểu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/minPriceLabel"
+            tools:ignore="Autofill,HardcodedText,TextFields" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/font"
-                    android:text="Giá hóa đơn:"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+        <!-- Ngày kết thúc -->
+        <TextView
+            android:id="@+id/endDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font"
+            android:text="Ngày kết thúc:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/minPriceUpdateDiscount"
+            tools:ignore="HardcodedText" />
 
-                <EditText
-                    android:id="@+id/minPriceUpdateDiscount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    tools:ignore="Autofill,LabelFor,TextFields" />
+        <EditText
+            android:id="@+id/endDateUpdateDiscount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font"
+            android:hint="Nhập ngày kết thúc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/endDateLabel"
+            tools:ignore="Autofill,HardcodedText,TextFields" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/font"
-                    android:text="Ngày kết thúc:"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+        <!-- Số lượng -->
+        <TextView
+            android:id="@+id/quantityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/font"
+            android:text="Số lượng:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/endDateUpdateDiscount"
+            tools:ignore="HardcodedText" />
 
-                <EditText
-                    android:id="@+id/endDateUpdateDiscount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    tools:ignore="Autofill,LabelFor,TextFields" />
+        <EditText
+            android:id="@+id/quantityUpdateDiscount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font"
+            android:hint="Nhập số lượng"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/quantityLabel"
+            tools:ignore="Autofill,HardcodedText,TextFields" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/font"
-                    android:text="Số lượng:"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/quantityUpdateDiscount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    tools:ignore="Autofill,LabelFor,TextFields" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

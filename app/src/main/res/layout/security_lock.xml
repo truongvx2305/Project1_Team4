@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/securityLockLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Mã bảo mật cũ/mới -->
     <EditText
         android:id="@+id/edt_securityCode1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:hint="Mã bảo mật cũ/mã bảo mật mới"
+        android:hint="Nhập mã bảo mật cũ/mã bảo mật mới"
         android:inputType="numberPassword"
         android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="Autofill,HardcodedText" />
 
+    <!-- Mã bảo mật mới/xác nhận -->
     <EditText
         android:id="@+id/edt_SecurityCode2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
-        android:hint="Mã bảo mật mới/xác nhận mã bảo mật"
+        android:hint="Nhập mã bảo mật mới/xác nhận mã bảo mật"
         android:inputType="numberPassword"
         android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_securityCode1"
         tools:ignore="Autofill,HardcodedText" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <!-- Nút Cập nhật -->
+    <Button
+        android:id="@+id/btn_updateSecurity"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="@font/font"
+        android:text="Cập nhật"
+        app:layout_constraintEnd_toStartOf="@id/btn_addSecurity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_SecurityCode2"
+        tools:ignore="ButtonStyle,HardcodedText" />
 
-        <Button
-            android:id="@+id/btn_updateSecurity"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/blue"
-            android:fontFamily="@font/font"
-            android:text="Cập nhật"
-            tools:ignore="ButtonStyle,HardcodedText" />
-
-        <Button
-            android:id="@+id/btn_addSecurity"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/blue"
-            android:fontFamily="@font/font"
-            android:text="Tạo khóa"
-            tools:ignore="ButtonStyle,HardcodedText" />
-    </LinearLayout>
-</LinearLayout>
+    <!-- Nút Tạo khóa -->
+    <Button
+        android:id="@+id/btn_addSecurity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="@font/font"
+        android:text="Tạo khóa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_updateSecurity"
+        app:layout_constraintTop_toBottomOf="@id/edt_SecurityCode2"
+        tools:ignore="ButtonStyle,HardcodedText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

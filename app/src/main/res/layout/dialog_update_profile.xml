@@ -1,84 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/updateProfileLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue"
-    android:orientation="vertical"
     android:padding="16dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/updateImageProfile"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:scaleType="centerCrop"
         android:src="@drawable/user1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CircularShape"
         tools:ignore="ContentDescription" />
 
     <TextView
+        android:id="@+id/tv_nameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
         android:text="Họ và tên:"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/updateImageProfile"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/edt_updateName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:hint="Nhập họ và tên"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_nameLabel"
         tools:ignore="Autofill,HardcodedText,TextFields" />
 
     <TextView
+        android:id="@+id/tv_emailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:text="Email:"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_updateName"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/edt_updateEmail"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:hint="Nhập email"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_emailLabel"
         tools:ignore="Autofill,HardcodedText,TextFields" />
 
     <TextView
+        android:id="@+id/tv_phoneLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:text="Số điện thoại:"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_updateEmail"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/edt_updatePhoneNumber"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
         android:hint="Nhập số điện thoại"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_phoneLabel"
         tools:ignore="Autofill,HardcodedText,TextFields" />
 
     <LinearLayout
@@ -86,11 +104,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_updatePhoneNumber">
 
         <Button
             android:id="@+id/btn_cancelProfile"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_profile_background"
             android:fontFamily="@font/font"
@@ -102,7 +123,7 @@
 
         <Button
             android:id="@+id/btn_saveProfile"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:background="@drawable/button_profile_background"
@@ -114,4 +135,4 @@
             tools:ignore="ButtonStyle,HardcodedText" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

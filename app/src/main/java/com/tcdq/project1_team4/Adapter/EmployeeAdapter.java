@@ -242,13 +242,13 @@ public class EmployeeAdapter extends BaseAdapter {
 
                 // Hiển thị thông tin tài khoản và mật khẩu
                 AlertDialog.Builder accountDialogBuilder = new AlertDialog.Builder(context);
-                View dialogShowAccountView = LayoutInflater.from(context).inflate(R.layout.dialog_show_username_password, null);
+                View dialogShowAccountView = LayoutInflater.from(context).inflate(R.layout.dialog_show_account, null);
                 accountDialogBuilder.setView(dialogShowAccountView);
 
-                TextView nameShowUsernamePassword = dialogShowAccountView.findViewById(R.id.nameShowUsernamePassword);
+                TextView nameShowUsernamePassword = dialogShowAccountView.findViewById(R.id.nameShowAccount);
                 TextView showUsername = dialogShowAccountView.findViewById(R.id.showUsername);
                 TextView showPassword = dialogShowAccountView.findViewById(R.id.showPassword);
-                ImageView imgShowUsernamePassword = dialogShowAccountView.findViewById(R.id.imgShowUsernamePassword);
+                ImageView imgShowUsernamePassword = dialogShowAccountView.findViewById(R.id.imgShowAccount);
 
                 byte[] imageBytes = employee.getImage();
                 if (imageBytes != null) {

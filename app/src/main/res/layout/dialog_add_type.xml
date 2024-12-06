@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/font"
-            android:text="Tên loại hàng:"
+            android:text="Tên loại sản phẩm:"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,10 +38,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/font"
+            android:hint="Nhập tên loại sản phẩm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/typeLabel"
-            tools:ignore="Autofill,LabelFor,TextFields" />
+            tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

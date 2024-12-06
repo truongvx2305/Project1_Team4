@@ -1,70 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogUpdateProductLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Container with background and elevation -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        tools:ignore="UselessParent">
+        android:layout_marginBottom="10dp"
+        android:background="#FFFFFF"
+        android:elevation="10dp"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Product Image -->
+        <ImageView
+            android:id="@+id/productImageUpdate"
+            android:layout_width="80dp"
+            android:layout_height="86dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="Profile Picture"
+            android:scaleType="centerCrop"
+            android:src="@drawable/type"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,ImageContrastCheck" />
+
+        <!-- Product Name Label -->
+        <TextView
+            android:id="@+id/productNameLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFFFF"
-            android:backgroundTint="#FFFFFF"
-            android:elevation="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            tools:ignore="UselessParent">
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font"
+            android:text="Tên sản Phẩm:"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/nameProductUpdate"
+            app:layout_constraintStart_toEndOf="@id/productImageUpdate"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
 
-            <ImageView
-                android:id="@+id/productImageUpdate"
-                android:layout_width="80dp"
-                android:layout_height="86dp"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="Profile Picture"
-                android:scaleType="centerCrop"
-                android:src="@drawable/type"
-                tools:ignore="HardcodedText,ImageContrastCheck" />
+        <!-- Product Name Input -->
+        <EditText
+            android:id="@+id/nameProductUpdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/font"
+            android:hint="Nhập tên sản phẩm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/productImageUpdate"
+            app:layout_constraintTop_toBottomOf="@id/productNameLabel"
+            tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutProduct"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="10dp"
-                tools:ignore="RtlSymmetry">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:text="Tên sản Phẩm:"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText" />
-
-                <EditText
-                    android:id="@+id/nameProductUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:hint="Nhập tên sản phẩm"
-                    tools:ignore="Autofill,HardcodedText,LabelFor,TextFields" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
