@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.UserDao;
-import com.tcdq.project1_team4.Function.Home;
 import com.tcdq.project1_team4.Function.Login;
 import com.tcdq.project1_team4.Function.Management.Brand;
 import com.tcdq.project1_team4.Function.Management.Color;

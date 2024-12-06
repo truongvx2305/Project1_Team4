@@ -13,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.tcdq.project1_team4.Dao.UserDao;
-import com.tcdq.project1_team4.Model.UserModel;
 import com.tcdq.project1_team4.R;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 
+/** @noinspection ALL */
 public class UpdatePassword extends Fragment {
     private EditText edtOldPassword, edtNewPassword;
     private Button btnUpdatePassword;
@@ -27,6 +27,7 @@ public class UpdatePassword extends Fragment {
         this.username = username;
     }
 
+    /** @noinspection resource*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
