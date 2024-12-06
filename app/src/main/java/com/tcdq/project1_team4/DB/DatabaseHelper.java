@@ -16,9 +16,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String sizeTable = "size";
     public static final String colorTable = "color";
     public static final String productTypeTable = "product_type";
+    public static final String warehouseTable = "warehouse";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 36);
+        super(context, DATABASE_NAME, null, 40);
     }
 
     @Override
@@ -42,6 +43,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createSizeTable(db);
         // Tạo bảng color
         createColorTable(db);
+        // Tạo bảng warehouse
+        createWarehouseTable(db);
 
         // Chèn dữ liệu admin mẫu
         insertAdmin(db);
@@ -61,6 +64,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertColor(db);
         //chèn dữ liệu mẫu product
         insertProduct(db);
+        //chèn dữ liệu mẫu warehouse
+        insertWarehouse(db);
+        insertWarehouse2(db);
     }
 
 
@@ -75,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + productTable);
         db.execSQL("DROP TABLE IF EXISTS " + sizeTable);
         db.execSQL("DROP TABLE IF EXISTS " + colorTable);
+        db.execSQL("DROP TABLE IF EXISTS " + warehouseTable);
 
         // Tạo lại bảng
         onCreate(db);
@@ -136,7 +143,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createProductTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + productTable + " (" +
                 "ID_Product INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "Image BLOB, " +
                 "Name TEXT, " +
                 "ID_ProductType INTEGER, " +
                 "ID_Brand INTEGER, " +
@@ -157,6 +163,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + colorTable + " (" +
                 "ID_Color INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "Name TEXT NOT NULL UNIQUE)");
+    }
+
+    private void createWarehouseTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + warehouseTable + " (" +
+                "ID_Product INTEGER, " +
+                "Image BLOB, " +
+                "ID_Color TEXT, " +
+                "ID_Size TEXT, " +
+                "Quantity INTEGER, " +
+                "Entry_Date TEXT, " +
+                "Entry_Price REAL, " +
+                "Exit_Date TEXT, " +
+                "Exit_Price REAL, " +
+                "isStill INTEGER, " +
+                "FOREIGN KEY(ID_Product) REFERENCES " + productTable + "(ID_Product), " +
+                "FOREIGN KEY(ID_Color) REFERENCES " + colorTable + "(ID_Color), " +
+                "FOREIGN KEY(ID_Size) REFERENCES " + sizeTable + "(ID_Size))");
     }
 
     private void insertAdmin(SQLiteDatabase db) {
@@ -289,5 +312,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(productTable, null, product1);
         Log.d("ProductDao", "Inserted product result: " + result);
+    }
+
+    private void insertWarehouse(SQLiteDatabase db) {
+        ContentValues warehouse = new ContentValues();
+        warehouse.put("ID_Product", 1);
+        warehouse.put("ID_Color", 1);
+        warehouse.put("ID_Size", 1);
+        warehouse.put("Quantity", 10);
+        warehouse.put("Entry_Date", "2024-12-6");
+        warehouse.put("Entry_Price", 100000);
+        warehouse.put("Exit_Price", 200000);
+        warehouse.put("isStill", 1);
+
+        db.insert(warehouseTable, null, warehouse);
+    }
+
+    private void insertWarehouse2(SQLiteDatabase db) {
+        ContentValues warehouse = new ContentValues();
+        warehouse.put("ID_Product", 1);
+        warehouse.put("ID_Color", 2);
+        warehouse.put("ID_Size", 2);
+        warehouse.put("Quantity", 0);
+        warehouse.put("Entry_Date", "2023-12-6");
+        warehouse.put("Entry_Price", 100000);
+        warehouse.put("Exit_Price", 200000);
+        warehouse.put("isStill", 0);
+
+        db.insert(warehouseTable, null, warehouse);
     }
 }

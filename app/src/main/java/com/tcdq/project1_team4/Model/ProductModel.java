@@ -7,15 +7,13 @@ import com.tcdq.project1_team4.Dao.ProductDao;
  */
 public class ProductModel {
     private int id;
-    private byte[] image;
     private String name;
     private int idProductType; // ID của loại sản phẩm
     private int idBrand; // ID của thương hiệu
 
     // Constructor
-    public ProductModel(int id, byte[] image, String name, int idProductType, int idBrand) {
+    public ProductModel(int id, String name, int idProductType, int idBrand) {
         this.id = id;
-        this.image = image;
         this.name = name;
         this.idProductType = idProductType;
         this.idBrand = idBrand;
@@ -31,14 +29,6 @@ public class ProductModel {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public String getName() {

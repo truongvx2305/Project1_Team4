@@ -32,6 +32,7 @@ import com.tcdq.project1_team4.Function.Management.Employee;
 import com.tcdq.project1_team4.Function.Management.Product;
 import com.tcdq.project1_team4.Function.Management.Size;
 import com.tcdq.project1_team4.Function.Management.Type;
+import com.tcdq.project1_team4.Function.Management.Warehouse;
 import com.tcdq.project1_team4.Function.Profile;
 import com.tcdq.project1_team4.Function.SecurityLock;
 import com.tcdq.project1_team4.Function.UpdatePassword;
@@ -199,8 +200,11 @@ public class Navigation extends AppCompatActivity {
         String title;
 
         int itemId = menuItem.getItemId();
-
-        if (itemId == R.id.item_discount_management) {
+        if (itemId == R.id.item_warehouse_management) {
+            fragment = new Warehouse();
+            ((Warehouse) fragment).setUsername(username);
+            title = "Quản lý kho hàng";
+        } else if (itemId == R.id.item_discount_management) {
             fragment = new Discount();
             ((Discount) fragment).setUsername(username);
             title = "Quản lý phiếu giảm giá";

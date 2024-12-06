@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogAddWarehouseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/warehouseImageAdd"
+        android:layout_width="120dp"
+        android:layout_height="126dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="Profile Picture"
+        android:scaleType="centerCrop"
+        android:src="@drawable/type"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:text="Sản phẩm:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <Spinner
+        android:id="@+id/nameProductSp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txv_typeWarehouseAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Loại sản phẩm:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/txv_brandWarehouseAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Thương hiệu:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Màu:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <Spinner
+        android:id="@+id/colorSp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Kích cỡ:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <Spinner
+        android:id="@+id/sizeSp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Số lượng:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/edt_quantityWarehouseAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:hint="Nhập số lượng"
+        tools:ignore="Autofill,HardcodedText,TextFields" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Giá nhập:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/edt_entryPriceWarehouseAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:hint="Nhập giá nhập"
+        tools:ignore="Autofill,HardcodedText,TextFields" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Giá xuất:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/edt_exitPriceWarehouseAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:hint="Nhập giá xuất"
+        tools:ignore="Autofill,HardcodedText,TextFields" />
+
+</LinearLayout>

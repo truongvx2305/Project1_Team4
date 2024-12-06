@@ -51,34 +51,11 @@ public class Product extends Fragment {
     private EditText searchProduct;
     private TextView emptyTextView;
     private Bitmap selectedImageBitmap;
-    private ImageView updateImageProduct;
     private String username;
 
     public void setUsername(String username) {
         this.username = username;
     }
-
-    private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
-                    Uri imageUri = result.getData().getData();
-                    try {
-                        Bitmap originalBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-                        if (updateImageProduct != null) {
-                            updateImageProduct.post(() -> {
-                                int width = updateImageProduct.getWidth();
-                                int height = updateImageProduct.getHeight();
-                                selectedImageBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true);
-                                updateImageProduct.setImageBitmap(selectedImageBitmap);
-                            });
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-    );
 
     @Nullable
     @Override
@@ -168,14 +145,9 @@ public class Product extends Fragment {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_product, null);
         builder.setView(dialogView);
 
-        updateImageProduct = dialogView.findViewById(R.id.productImageAdd);
         EditText nameField = dialogView.findViewById(R.id.nameProductAdd);
         Spinner typeSpinner = dialogView.findViewById(R.id.typeProductSp);
         Spinner brandSpinner = dialogView.findViewById(R.id.brandProductSp);
-
-        // Reset selectedImageBitmap khi hiển thị dialog
-        selectedImageBitmap = null;
-        updateImageProduct.setImageResource(R.drawable.type); // Đặt ảnh mặc định
 
         ProductDao productDao = new ProductDao(new DatabaseHelper(getContext()).getReadableDatabase());
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, productDao.getAllProductTypes());
@@ -186,21 +158,11 @@ public class Product extends Fragment {
         typeSpinner.setAdapter(typeAdapter);
         brandSpinner.setAdapter(brandAdapter);
 
-        updateImageProduct.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickImageLauncher.launch(intent);
-        });
-
         builder.setPositiveButton("Thêm", (dialog, which) -> {
             String name = nameField.getText().toString().trim();
 
             if (TextUtils.isEmpty(name)) {
-                nameField.setError("Tên sản phẩm không được để trống!");
-                return;
-            }
-
-            if (selectedImageBitmap == null) {
-                Toast.makeText(getContext(), "Vui lòng chọn ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Tên sản phẩm không được để trống!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -208,15 +170,12 @@ public class Product extends Fragment {
             newProduct.setName(name);
             newProduct.setType(productDao.getProductTypeIdByName(typeSpinner.getSelectedItem().toString()));
             newProduct.setBrand(productDao.getBrandIdByName(brandSpinner.getSelectedItem().toString()));
-            newProduct.setImage(convertBitmapToByteArray(selectedImageBitmap));
 
             ProductDao productDaoWrite = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
             if (productDaoWrite.insertProduct(newProduct)) {
-                selectedImageBitmap = null; // Reset sau khi thêm thành công
                 loadData();
                 Toast.makeText(getContext(), "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
             } else {
-                selectedImageBitmap = null; // Reset ngay cả khi thêm thất bại
                 Toast.makeText(getContext(), "Thêm sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -230,23 +189,8 @@ public class Product extends Fragment {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_product, null);
         builder.setView(dialogView);
 
-        updateImageProduct = dialogView.findViewById(R.id.productImageUpdate);
         EditText nameField = dialogView.findViewById(R.id.nameProductUpdate);
-
         nameField.setText(product.getName());
-        selectedImageBitmap = convertByteArrayToBitmap(product.getImage());
-
-        byte[] imageBytes = product.getImage();
-        if (imageBytes != null) {
-            updateImageProduct.setImageBitmap(selectedImageBitmap);
-        } else {
-            updateImageProduct.setImageResource(R.drawable.type); // Ảnh mặc định
-        }
-
-        updateImageProduct.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickImageLauncher.launch(intent);
-        });
 
         builder.setPositiveButton("Cập nhật", (dialog, which) -> {
             String name = nameField.getText().toString().trim();
@@ -262,7 +206,6 @@ public class Product extends Fragment {
             }
 
             product.setName(name);
-            product.setImage(convertBitmapToByteArray(selectedImageBitmap));
 
             ProductDao productDaoWrite = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
             if (productDaoWrite.updateProduct(product)) {
@@ -275,18 +218,5 @@ public class Product extends Fragment {
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
         builder.show();
-    }
-
-    private Bitmap convertByteArrayToBitmap(byte[] byteArray) {
-        if (byteArray != null) {
-            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        }
-        return null; // Trả về null nếu byteArray là null
-    }
-
-    private byte[] convertBitmapToByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
     }
 }
