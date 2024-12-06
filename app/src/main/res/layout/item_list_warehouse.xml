@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/itemListProductLayout"
+    android:id="@+id/itemListWarehouseLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,6 +14,7 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
+            android:id="@+id/linearLayoutWarehouse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -26,7 +27,7 @@
             tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/imgProduct"
+                android:id="@+id/imgProductWarehouse"
                 android:layout_width="80dp"
                 android:layout_height="86dp"
                 android:layout_gravity="center_vertical"
@@ -43,34 +44,61 @@
                 android:orientation="vertical"
                 tools:ignore="RtlSymmetry">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <TextView
+                        android:id="@+id/nameProductWarehouse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font"
+                        android:text="Sản phẩm"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        tools:ignore="HardcodedText" />
+
+                    <ImageView
+                        android:id="@+id/errorProductWarehouse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="100dp"
+                        android:src="@drawable/error"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/nameProduct"
+                    android:id="@+id/priceProductWarehouse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/font"
-                    android:text="Sản Phẩm"
+                    android:text="Giá bán"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/typeProduct"
+                    android:id="@+id/quantityProductWarehouse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/font"
-                    android:text="Loại"
+                    android:text="Số lượng"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/brandProduct"
+                    android:id="@+id/statusProductWarehouse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/font"
-                    android:text="Thương hiệu"
+                    android:text="Trạng thái"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
