@@ -16,6 +16,7 @@ import com.tcdq.project1_team4.Model.WarehouseModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/** @noinspection ALL */
 public class WarehouseDao {
     private final SQLiteDatabase db;
 

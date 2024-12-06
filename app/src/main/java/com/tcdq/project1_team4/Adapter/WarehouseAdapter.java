@@ -13,17 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tcdq.project1_team4.DB.DatabaseHelper;
-import com.tcdq.project1_team4.Dao.BrandDao;
 import com.tcdq.project1_team4.Dao.ColorDao;
 import com.tcdq.project1_team4.Dao.SizeDao;
-import com.tcdq.project1_team4.Dao.TypeDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
-import com.tcdq.project1_team4.Model.ProductModel;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
 
 import java.util.List;
 
+/** @noinspection ALL */
 public class WarehouseAdapter extends BaseAdapter {
     private final Context context;
     private List<WarehouseModel> warehouseList;

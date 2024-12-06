@@ -1,9 +1,8 @@
 package com.tcdq.project1_team4.Model;
 
-import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
-import com.tcdq.project1_team4.Function.Management.Warehouse;
 
+/** @noinspection ALL */
 public class WarehouseModel {
     private int idProduct;
     private byte[] image;
@@ -16,6 +15,7 @@ public class WarehouseModel {
     private double exitPrice;
     private boolean isStill;
 
+    /** @noinspection unused*/
     public WarehouseModel() {
     }
 
@@ -36,6 +36,7 @@ public class WarehouseModel {
         return idProduct;
     }
 
+    /** @noinspection unused*/
     public void setIdProduct(int idProduct) {
         this.idProduct = idProduct;
     }
@@ -44,6 +45,7 @@ public class WarehouseModel {
         return image;
     }
 
+    /** @noinspection unused*/
     public void setImage(byte[] image) {
         this.image = image;
     }
@@ -52,6 +54,7 @@ public class WarehouseModel {
         return idColor;
     }
 
+    /** @noinspection unused*/
     public void setIdColor(int idColor) {
         this.idColor = idColor;
     }
@@ -60,6 +63,7 @@ public class WarehouseModel {
         return idSize;
     }
 
+    /** @noinspection unused*/
     public void setIdSize(int idSize) {
         this.idSize = idSize;
     }
@@ -68,6 +72,7 @@ public class WarehouseModel {
         return quantity;
     }
 
+    /** @noinspection unused*/
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -76,6 +81,7 @@ public class WarehouseModel {
         return entryDate;
     }
 
+    /** @noinspection unused*/
     public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
     }
@@ -84,14 +90,17 @@ public class WarehouseModel {
         return entryPrice;
     }
 
+    /** @noinspection unused*/
     public void setEntryPrice(double entryPrice) {
         this.entryPrice = entryPrice;
     }
 
+    /** @noinspection unused*/
     public String getExitDate() {
         return exitDate;
     }
 
+    /** @noinspection unused*/
     public void setExitDate(String exitDate) {
         this.exitDate = exitDate;
     }
@@ -100,6 +109,7 @@ public class WarehouseModel {
         return exitPrice;
     }
 
+    /** @noinspection unused*/
     public void setExitPrice(double exitPrice) {
         this.exitPrice = exitPrice;
     }
@@ -108,10 +118,12 @@ public class WarehouseModel {
         return isStill;
     }
 
+    /** @noinspection unused*/
     public void setStill(boolean still) {
         isStill = still;
     }
 
+    /** @noinspection unused*/
     public String getStatus() {
         return this.isStill ? "Còn hàng" : "Hết hàng";
     }

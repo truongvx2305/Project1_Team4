@@ -22,9 +22,7 @@ import com.tcdq.project1_team4.Adapter.BrandAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.BrandDao;
 import com.tcdq.project1_team4.Dao.ProductDao;
-import com.tcdq.project1_team4.Dao.TypeDao;
 import com.tcdq.project1_team4.Model.BrandModel;
-import com.tcdq.project1_team4.Model.TypeModel;
 import com.tcdq.project1_team4.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

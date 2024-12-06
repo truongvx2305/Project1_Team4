@@ -1,6 +1,6 @@
-// Warehouse.java
 package com.tcdq.project1_team4.Function.Management;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -33,7 +33,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tcdq.project1_team4.Adapter.WarehouseAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
-import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
@@ -41,9 +40,9 @@ import com.tcdq.project1_team4.R;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+/** @noinspection ALL */
 public class Warehouse extends Fragment {
     private final List<WarehouseModel> originalWarehouseList = new ArrayList<>();
     private final List<WarehouseModel> warehouseList = new ArrayList<>();
@@ -101,6 +100,7 @@ public class Warehouse extends Fragment {
         btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
     }
 
+    /** @noinspection resource*/
     private void loadData() {
         DatabaseHelper dbHelper = new DatabaseHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -191,13 +191,14 @@ public class Warehouse extends Fragment {
         sizeSpinner.setAdapter(sizeAdapter);
 
         nameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedName = nameSpinner.getSelectedItem().toString();
                 String[] brandAndType = warehouseDao.getBrandAndTypeByName(selectedName);
                 if (brandAndType != null) {
-                    txvType.setText(brandAndType[0]); // Loại sản phẩm
-                    txvBrand.setText(brandAndType[1]); // Thương hiệu
+                    txvType.setText("Loại sản phẩm: " + brandAndType[0]); // Loại sản phẩm
+                    txvBrand.setText("Thương hiệu: " + brandAndType[1]); // Thương hiệu
                 } else {
                     txvType.setText("");
                     txvBrand.setText("");
@@ -211,10 +212,18 @@ public class Warehouse extends Fragment {
             }
         });
 
+        updateImageProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickImageLauncher.launch(intent);
+        });
+
         builder.setPositiveButton("Thêm", (dialog, which) -> {
             String quantity = quantityField.getText().toString().trim();
             String entryPrice = entryPriceField.getText().toString().trim();
             String exitPrice = exitPriceField.getText().toString().trim();
+            String selectedName = nameSpinner.getSelectedItem().toString();
+            String selectedColor = colorSpinner.getSelectedItem().toString();
+            String selectedSize = sizeSpinner.getSelectedItem().toString();
 
             if (TextUtils.isEmpty(quantity)) {
                 Toast.makeText(getContext(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show();
@@ -233,8 +242,20 @@ public class Warehouse extends Fragment {
 
             // Xử lý thêm sản phẩm
         });
-
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+
+    private Bitmap convertByteArrayToBitmap(byte[] byteArray) {
+        if (byteArray != null) {
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        }
+        return null; // Trả về null nếu byteArray là null
+    }
+
+    private byte[] convertBitmapToByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
     }
 }

@@ -13,7 +13,9 @@ import com.tcdq.project1_team4.Model.ProductModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class ProductDao {
     private final SQLiteDatabase db;
 
@@ -27,7 +29,6 @@ public class ProductDao {
         values.put("Name", product.getName());
         values.put("ID_ProductType", product.getIdProductType());
         values.put("ID_Brand", product.getIdBrand());
-//        values.put("Image", product.getImage());  // Lưu image dưới dạng byte[]
 
         long result = db.insert("product", null, values);
         if (result != -1) {
@@ -46,7 +47,6 @@ public class ProductDao {
         // Tạo ContentValues để lưu trữ các giá trị cần cập nhật
         ContentValues values = new ContentValues();
         values.put("name", product.getName());  // Cập nhật tên sản phẩm
-//        values.put("image", product.getImage());  // Cập nhật hình ảnh dưới dạng byte[]
 
         // Thực hiện câu lệnh cập nhật dữ liệu trong cơ sở dữ liệu
         int result = db.update("product", values, "ID_Product = ?", new String[]{String.valueOf(product.getId())});
@@ -70,7 +70,6 @@ public class ProductDao {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
                 int productTypeId = cursor.getInt(cursor.getColumnIndexOrThrow("ID_ProductType"));
                 int brandId = cursor.getInt(cursor.getColumnIndexOrThrow("ID_Brand"));
-//                byte[] image = cursor.getBlob(cursor.getColumnIndexOrThrow("Image"));  // Lấy hình ảnh dưới dạng byte[]
 
                 ProductModel product = new ProductModel(id, name, productTypeId, brandId);
                 products.add(product);
@@ -157,7 +156,9 @@ public class ProductDao {
         return brandId;
     }
 
-    /** @noinspection unused*/ // Lấy tên thương hiệu theo ID
+    /**
+     * @noinspection unused
+     */ // Lấy tên thương hiệu theo ID
     public String getBrandNameById(int brandId) {
         String brandName = null;
         Cursor cursor = db.rawQuery("SELECT Name FROM brand WHERE ID_Brand = ?", new String[]{String.valueOf(brandId)});
@@ -179,13 +180,9 @@ public class ProductDao {
         return typeName;
     }
 
-    /** @noinspection unused*/
-//    public boolean updateProductImage(int productId, byte[] imageBytes) {
-//        ContentValues values = new ContentValues();
-//        values.put("image", imageBytes);
-//        int rows = db.update("product", values, "ID_Product = ?", new String[]{String.valueOf(productId)});
-//        return rows > 0;
-//    }
+    /**
+     * @noinspection unused
+     */
 
     public int getProductCountByTypeId(int typeId) {
         int count = 0;
