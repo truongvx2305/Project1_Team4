@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "project1_group4.db";
+    public static final String DATABASE_NAME = "project1_team4.db";
     public static final String userTable = "user";
     public static final String customerTable = "customer";
     public static final String discountTable = "discount";
@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String invoiceDetailTable = "invoiceDetail";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 42);
+        super(context, DATABASE_NAME, null, 49);
     }
 
     @Override
@@ -75,8 +75,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertWarehouse(db);
         insertWarehouse2(db);
     }
-
-
 
 
     @Override
@@ -272,8 +270,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         discount.put("Name", "Phiếu giảm giá 10%");
         discount.put("Discount_Price", 0.1);
         discount.put("Min_Order_Price", 1000000);
-        discount.put("Start_Date", "2024-11-21");
-        discount.put("End_Date", "2024-12-31");
+        discount.put("Start_Date", "01-11-2024");
+        discount.put("End_Date", "31-12-2024");
         discount.put("Quantity", 10);
         discount.put("isValid", 1);
 
@@ -285,8 +283,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         discount.put("Name", "Phiếu giảm giá 20%");
         discount.put("Discount_Price", 0.2);
         discount.put("Min_Order_Price", 2000000);
-        discount.put("Start_Date", "2024-11-21");
-        discount.put("End_Date", "2024-11-29");
+        discount.put("Start_Date", "01-11-2024");
+        discount.put("End_Date", "01-12-2024");
         discount.put("Quantity", 10);
         discount.put("isValid", 0);
 

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,6 +53,8 @@ public class Warehouse extends Fragment {
     private WarehouseAdapter adapter;
     private ListView warehouseView;
     private EditText searchWarehouse;
+    FloatingActionButton btnAddProduct;
+    CheckBox checkBox;
     /**
      * @noinspection unused
      */
@@ -104,9 +107,8 @@ public class Warehouse extends Fragment {
     private void initializeUI(View view) {
         warehouseView = view.findViewById(R.id.listWarehouse);
         searchWarehouse = view.findViewById(R.id.searchWarehouse);
-        FloatingActionButton btnAddProduct = view.findViewById(R.id.btn_addWarehouse);
-
-        btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
+        btnAddProduct = view.findViewById(R.id.btn_addWarehouse);
+        checkBox = view.findViewById(R.id.checkBoxProductWarehouse);
     }
 
     /**
@@ -158,8 +160,11 @@ public class Warehouse extends Fragment {
             }
         });
 
+        btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
+
         warehouseView.setOnItemClickListener((parent, view, position, id) -> {
             WarehouseModel product = warehouseList.get(position);
+            showActionDialog(product);
         });
     }
 
@@ -298,6 +303,93 @@ public class Warehouse extends Fragment {
             }
         });
 
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void showActionDialog(WarehouseModel product) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Chọn hành động");
+        builder.setItems(new String[]{"Sửa", "Xóa"}, (dialog, which) -> {
+            if (which == 0) {
+                // Sửa sản phẩm
+                showDialogUpdateProduct(product);
+            } else if (which == 1) {
+                // Xóa sản phẩm
+                confirmDeleteProduct(product);
+            }
+        });
+        builder.show();
+    }
+
+    private void showDialogUpdateProduct(WarehouseModel product) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_warehouse, null);
+        builder.setView(dialogView);
+
+        updateImageProduct = dialogView.findViewById(R.id.warehouseImageAdd);
+        Spinner nameSpinner = dialogView.findViewById(R.id.nameProductSp);
+        TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseAdd);
+        TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseAdd);
+        Spinner colorSpinner = dialogView.findViewById(R.id.colorSp);
+        Spinner sizeSpinner = dialogView.findViewById(R.id.sizeSp);
+        EditText quantityField = dialogView.findViewById(R.id.edt_quantityWarehouseAdd);
+        EditText entryPriceField = dialogView.findViewById(R.id.edt_entryPriceWarehouseAdd);
+        EditText exitPriceField = dialogView.findViewById(R.id.edt_exitPriceWarehouseAdd);
+
+        // Hiển thị thông tin sản phẩm hiện tại
+        updateImageProduct.setImageBitmap(convertByteArrayToBitmap(product.getImage()));
+        quantityField.setText(String.valueOf(product.getQuantity()));
+        entryPriceField.setText(String.valueOf(product.getEntryPrice()));
+        exitPriceField.setText(String.valueOf(product.getExitPrice()));
+
+        // Cập nhật sản phẩm
+        builder.setPositiveButton("Cập nhật", (dialog, which) -> {
+            String quantity = quantityField.getText().toString().trim();
+            String entryPrice = entryPriceField.getText().toString().trim();
+            String exitPrice = exitPriceField.getText().toString().trim();
+
+            if (TextUtils.isEmpty(quantity) || TextUtils.isEmpty(entryPrice) || TextUtils.isEmpty(exitPrice)) {
+                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            product.setQuantity(Integer.parseInt(quantity));
+            product.setEntryPrice(Float.parseFloat(entryPrice));
+            product.setExitPrice(Float.parseFloat(exitPrice));
+
+            if (selectedImageBitmap != null) {
+                product.setImage(convertBitmapToByteArray(selectedImageBitmap));
+            }
+
+            // Cập nhật vào cơ sở dữ liệu
+            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            if (warehouseDao.insertOrUpdateProduct(product)) {
+                Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                loadData();
+            } else {
+                Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+
+    private void confirmDeleteProduct(WarehouseModel product) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Xác nhận");
+        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+        builder.setPositiveButton("Xóa", (dialog, which) -> {
+            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            if (warehouseDao.delete(product.getIdProduct())) {
+                Toast.makeText(getContext(), "Xóa sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                loadData();
+            } else {
+                Toast.makeText(getContext(), "Xóa sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
         builder.show();
     }

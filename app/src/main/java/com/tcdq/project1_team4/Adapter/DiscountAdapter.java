@@ -27,7 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class DiscountAdapter extends BaseAdapter {
     private final Context context;
     private final List<DiscountModel> discountList;
@@ -83,7 +85,7 @@ public class DiscountAdapter extends BaseAdapter {
         // Gán dữ liệu từ DiscountModel vào View
         DiscountModel discount = discountList.get(position);
         holder.nameDiscount.setText(discount.getName());
-        holder.minPriceDiscount.setText("Giá tối thiểu: " + discount.getMinOrderPrice() + " VND");
+        holder.minPriceDiscount.setText("Giá tối thiểu: " + discount.getMinOrderPrice() + " đ");
         holder.quantityDiscount.setText("Số lượng: " + discount.getQuantity());
         holder.endDateDiscount.setText("Ngày kết thúc: " + discount.getEndDate());
         holder.statusDiscount.setText("Trạng thái: " + discount.getStatus());
@@ -129,16 +131,16 @@ public class DiscountAdapter extends BaseAdapter {
             } else {
                 // Lấy ngày hiện tại
                 Calendar calendar = Calendar.getInstance();
+                day = calendar.get(Calendar.DAY_OF_MONTH);
                 year = calendar.get(Calendar.YEAR);
                 month = calendar.get(Calendar.MONTH);
-                day = calendar.get(Calendar.DAY_OF_MONTH);
             }
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, selectedYear, selectedMonth, selectedDay) -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, selectedDay, selectedMonth, selectedYear) -> {
                 // Cập nhật ngày được chọn vào EditText
-                @SuppressLint("DefaultLocale") String formattedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                @SuppressLint("DefaultLocale") String formattedDate = String.format("%04d-%02d-%02d", selectedDay, selectedMonth + 1, selectedYear);
                 endDateField.setText(formattedDate);
-            }, year, month, day);
+            }, day, month, year);
 
             datePickerDialog.show();
         });
@@ -181,14 +183,14 @@ public class DiscountAdapter extends BaseAdapter {
             return false;
         }
 
-        // Kiểm tra ngày kết thúc có đúng định dạng yyyy-MM-dd
+        // Kiểm tra ngày kết thúc có đúng định dạng dd-MM-yyyy
         if (endDate.isEmpty()) {
             endDateField.setError("Vui lòng nhập ngày kết thúc!");
             return false;
         }
 
         // Kiểm tra ngày nhập có đúng định dạng yyyy-MM-dd
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         dateFormat.setLenient(false);
         try {
             Date parsedEndDate = dateFormat.parse(endDate);
@@ -200,7 +202,7 @@ public class DiscountAdapter extends BaseAdapter {
                 return false;
             }
         } catch (ParseException e) {
-            endDateField.setError("Ngày phải có định dạng yyyy-MM-dd!");
+            endDateField.setError("Ngày phải có định dạng dd-MM-yyyy!");
             return false;
         }
 

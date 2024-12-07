@@ -66,6 +66,11 @@ public class WarehouseDao {
         }
     }
 
+    public boolean delete(int productId) {
+        int result = db.delete("warehouse", "ID_Product = ?", new String[]{String.valueOf(productId)});
+        return result > 0;
+    }
+
     // Lấy danh sách sản phẩm
     public List<WarehouseModel> getAllProduct() {
         List<WarehouseModel> products = new ArrayList<>();

@@ -120,6 +120,8 @@
                     android:id="@+id/checkBoxProductWarehouse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     tools:ignore="ContentDescription,TouchTargetSizeCheck" />
 
                 <ImageView

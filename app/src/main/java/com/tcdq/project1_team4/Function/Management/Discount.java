@@ -35,7 +35,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/** @noinspection ALL*/
+/**
+ * @noinspection ALL
+ */
 public class Discount extends Fragment {
     private final List<DiscountModel> discountList = new ArrayList<>();
     private DiscountAdapter adapter;
@@ -86,7 +88,7 @@ public class Discount extends Fragment {
     }
 
     private void updateDiscountValidity() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         Date currentDate = new Date();
 
         DiscountDao discountDao = new DiscountDao(new DatabaseHelper(getContext()).getWritableDatabase());
@@ -198,7 +200,7 @@ public class Discount extends Fragment {
             String endDate = endDateField.getText().toString().trim();
             String quantity = quantityField.getText().toString().trim();
 
-            String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String startDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
             if (validateDiscountInput(priceField, minPriceField, endDateField, quantityField, price, minPrice, endDate, quantity)) {
                 DiscountModel newDiscount = new DiscountModel();
@@ -229,18 +231,18 @@ public class Discount extends Fragment {
     private void showDatePickerDialog(EditText editText) {
         // Lấy ngày hiện tại
         Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         // Tạo DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                (view, selectedYear, selectedMonth, selectedDay) -> {
+                (view, selectedDay, selectedMonth, selectedYear) -> {
                     // Định dạng ngày và đặt vào EditText
                     String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d",
-                            selectedYear, selectedMonth + 1, selectedDay);
+                            selectedDay, selectedMonth + 1, selectedYear);
                     editText.setText(selectedDate);
-                }, year, month, day);
+                }, day, month, year);
 
         // Hiển thị DatePickerDialog
         datePickerDialog.show();
@@ -304,7 +306,7 @@ public class Discount extends Fragment {
     }
 
     private boolean isValidDate(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         sdf.setLenient(false);
         try {
             sdf.parse(dateStr);
