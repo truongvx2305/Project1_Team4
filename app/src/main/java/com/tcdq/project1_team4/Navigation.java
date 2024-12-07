@@ -104,12 +104,12 @@ public class Navigation extends AppCompatActivity {
 
     // Mở màn hình Home sau khi đăng nhập thành công
     private void navigateToAccountManagement() {
-        Profile profileFragment = new Profile();
-        profileFragment.setUsername(username);
-        loadFragment(profileFragment, "Quản lý tài khoản");
+        Warehouse warehouseFragment = new Warehouse();
+        warehouseFragment.setUsername(username);
+        loadFragment(warehouseFragment, "Quản lý kho hàng");
 
         // Đặt trạng thái được chọn cho mục "Quản lý tài khoản"
-        MenuItem profileItem = navigationView.getMenu().findItem(R.id.item_profile);
+        MenuItem profileItem = navigationView.getMenu().findItem(R.id.item_warehouse_management);
         if (profileItem != null) {
             profileItem.setChecked(true);
         }
@@ -173,8 +173,13 @@ public class Navigation extends AppCompatActivity {
             Log.d("Navigation", "Người dùng không phải là admin. Ẩn các mục dành cho admin.");
             int[] restrictedItems = {
                     R.id.item_product_management,
+                    R.id.item_brand_management,
+                    R.id.item_size_management,
+                    R.id.item_color_management,
+                    R.id.item_type_management,
                     R.id.item_employee_management,
-                    R.id.item_report_statistics
+                    R.id.item_report_statistics,
+                    R.id.item_history_product
             };
             for (int itemId : restrictedItems) {
                 MenuItem item = navigationView.getMenu().findItem(itemId);
