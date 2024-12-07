@@ -96,7 +96,7 @@ public class WarehouseAdapter extends BaseAdapter {
 
         // Kiểm tra số lượng và thay đổi giao diện
         int quantity = product.getQuantity();
-        if (quantity < 10) {
+        if (quantity > 0 && quantity < 10) {
             errorProductWarehouse.setColorFilter(context.getResources().getColor(R.color.red)); // Đổi màu thành đỏ
             errorProductWarehouse.setVisibility(View.VISIBLE);
 
