@@ -18,6 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String productTypeTable = "product_type";
     public static final String warehouseTable = "warehouse";
     public static final String invoiceTable = "invoice";
+    public static final String invoiceDetailTable = "invoiceDetail";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 42);
@@ -48,6 +49,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createWarehouseTable(db);
         // Tạo bảng Invoice
         createInvoiceTable(db);
+        // Tạo bảng InvoiceDetail
+        createInvoiceDetailTable(db);
+
 
         // Chèn dữ liệu admin mẫu
         insertAdmin(db);
@@ -71,6 +75,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertWarehouse(db);
         insertWarehouse2(db);
     }
+
+
 
 
     @Override
@@ -191,6 +197,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Total_Amount REAL, " +
                 "FOREIGN KEY(ID_User) REFERENCES " + userTable + "(ID_User), " +
                 "FOREIGN KEY(ID_Customer) REFERENCES " + customerTable + "(ID_Customer))");
+    }
+
+    private void createInvoiceDetailTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + invoiceDetailTable + " (" +
+                "ID_InvoiceDetail INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ID_Invoice INTEGER, " +
+                "ID_Discount INTEGER, " +
+                "Quantity INTEGER, " +
+                "Total_Price REAL, " +
+                "FOREIGN KEY(ID_Invoice) REFERENCES " + invoiceTable + "(ID_Invoice), " +
+                "FOREIGN KEY(ID_Discount) REFERENCES " + discountTable + "(ID_Discount))");
     }
 
     private void insertAdmin(SQLiteDatabase db) {
