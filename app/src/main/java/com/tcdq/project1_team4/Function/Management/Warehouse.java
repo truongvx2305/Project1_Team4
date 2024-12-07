@@ -255,17 +255,17 @@ public class Warehouse extends Fragment {
             String selectedSize = sizeSpinner.getSelectedItem().toString();
 
             if (TextUtils.isEmpty(quantity)) {
-                quantityField.setError("Vui lòng nhập số lượng!");
+                Toast.makeText(getContext(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (TextUtils.isEmpty(entryPrice)) {
-                entryPriceField.setError("Vui lòng nhập giá nhập!");
+                Toast.makeText(getContext(), "Vui lòng nhập giá nhập!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (TextUtils.isEmpty(exitPrice)) {
-                entryPriceField.setError("Vui lòng nhập giá xuất!");
+                Toast.makeText(getContext(), "Vui lòng nhập giá xuất!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
