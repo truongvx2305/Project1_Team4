@@ -248,7 +248,7 @@ public class Navigation extends AppCompatActivity {
         } else if (itemId == R.id.item_security) {
             fragment = new SecurityLock();
             ((SecurityLock) fragment).setUsername(username);
-            title = "Quản lý khóa bảo mật";
+            title = "Khóa bảo mật";
         } else if (itemId == R.id.item_update_password) {
             fragment = new UpdatePassword();
             ((UpdatePassword) fragment).setUsername(username);

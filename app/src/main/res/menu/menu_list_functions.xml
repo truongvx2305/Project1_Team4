@@ -92,7 +92,7 @@
                     <item
                         android:id="@+id/item_security"
                         android:icon="@drawable/lock"
-                        android:title="Quản lý khóa bảo mật"
+                        android:title="Khóa bảo mật"
                         tools:ignore="HardcodedText" />
                     <item
                         android:id="@+id/item_history_product"

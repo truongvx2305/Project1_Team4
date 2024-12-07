@@ -44,31 +44,23 @@
                 android:orientation="vertical"
                 tools:ignore="RtlSymmetry">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/errorProductWarehouse"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                    android:layout_gravity="end"
+                    android:src="@drawable/error"
+                    tools:ignore="ContentDescription" />
 
-                    <TextView
-                        android:id="@+id/nameProductWarehouse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/font"
-                        android:text="Sản phẩm"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                    <ImageView
-                        android:id="@+id/errorProductWarehouse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="50dp"
-                        android:src="@drawable/error"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/nameProductWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font"
+                    android:text="Sản phẩm"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/colorProductWarehouse"
@@ -80,6 +72,7 @@
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -100,10 +93,9 @@
 
                     <CheckBox
                         android:id="@+id/checkBoxProductWarehouse"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="150dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="130dp"
                         tools:ignore="ContentDescription,TouchTargetSizeCheck" />
                 </LinearLayout>
 
@@ -131,19 +123,16 @@
                     tools:ignore="HardcodedText" />
 
 
-
-
-                    <TextView
-                        android:id="@+id/statusProductWarehouse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/font"
-                        android:text="Trạng thái"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText"
-                        />
+                <TextView
+                    android:id="@+id/statusProductWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/font"
+                    android:text="Trạng thái"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
         </LinearLayout>
