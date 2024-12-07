@@ -44,14 +44,6 @@
                 android:orientation="vertical"
                 tools:ignore="RtlSymmetry">
 
-                <ImageView
-                    android:id="@+id/errorProductWarehouse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:src="@drawable/error"
-                    tools:ignore="ContentDescription" />
-
                 <TextView
                     android:id="@+id/nameProductWarehouse"
                     android:layout_width="wrap_content"
@@ -59,7 +51,7 @@
                     android:fontFamily="@font/font"
                     android:text="Sản phẩm"
                     android:textColor="#000000"
-                    android:textSize="14sp"
+                    android:textSize="20sp"
                     tools:ignore="HardcodedText" />
 
                 <TextView
@@ -73,32 +65,16 @@
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                <TextView
+                    android:id="@+id/sizeProductWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
-
-                    <TextView
-                        android:id="@+id/sizeProductWarehouse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/font"
-                        android:text="Kích cỡ"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
-
-                    <CheckBox
-                        android:id="@+id/checkBoxProductWarehouse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="130dp"
-                        tools:ignore="ContentDescription,TouchTargetSizeCheck" />
-                </LinearLayout>
-
+                    android:fontFamily="@font/font"
+                    android:text="Kích cỡ"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/exitPriceProductWarehouse"
@@ -122,7 +98,6 @@
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
 
-
                 <TextView
                     android:id="@+id/statusProductWarehouse"
                     android:layout_width="wrap_content"
@@ -135,6 +110,29 @@
                     tools:ignore="HardcodedText" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/checkBoxProductWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ContentDescription,TouchTargetSizeCheck" />
+
+                <ImageView
+                    android:id="@+id/errorProductWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/error"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

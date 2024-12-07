@@ -87,7 +87,7 @@ public class WarehouseAdapter extends BaseAdapter {
         }
 
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(context).getReadableDatabase());
-        tvName.setText("Tên sản phẩm: " + warehouseDao.getNameById(product.getIdProduct()));
+        tvName.setText(warehouseDao.getNameById(product.getIdProduct()));
         tvColor.setText("Màu: " + warehouseDao.getColorNameById(product.getIdColor()));
         tvSize.setText("Kích cỡ: " + warehouseDao.getSizeNameById(product.getIdSize()));
         tvExitPrice.setText("Giá xuất: " + product.getExitPrice() + " đ");
