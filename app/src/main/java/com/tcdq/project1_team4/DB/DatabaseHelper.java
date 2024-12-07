@@ -17,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String colorTable = "color";
     public static final String productTypeTable = "product_type";
     public static final String warehouseTable = "warehouse";
+    public static final String invoiceTable = "invoice";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 42);
@@ -45,6 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createColorTable(db);
         // Tạo bảng warehouse
         createWarehouseTable(db);
+        // Tạo bảng Invoice
+        createInvoiceTable(db);
 
         // Chèn dữ liệu admin mẫu
         insertAdmin(db);
@@ -146,11 +149,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Name TEXT, " +
                 "ID_ProductType INTEGER, " +
                 "ID_Brand INTEGER, " +
-                "FOREIGN KEY(ID_ProductType) REFERENCES " + productTypeTable + "(ID_ProductType) " +
-                "ON DELETE CASCADE ON UPDATE CASCADE, " +
-                "FOREIGN KEY(ID_Brand) REFERENCES " + brandTable + "(ID_Brand) " +
-                "ON DELETE CASCADE ON UPDATE CASCADE" +
-                ")");
+                "FOREIGN KEY(ID_ProductType) REFERENCES " + productTypeTable + "(ID_ProductType), " +
+                "FOREIGN KEY(ID_Brand) REFERENCES " + brandTable + "(ID_Brand))");
     }
 
     private void createSizeTable(SQLiteDatabase db) {
@@ -169,8 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + warehouseTable + " (" +
                 "ID_Product INTEGER, " +
                 "Image BLOB, " +
-                "ID_Color TEXT, " +
-                "ID_Size TEXT, " +
+                "ID_Color INTEGER, " +
+                "ID_Size INTEGER, " +
                 "Quantity INTEGER, " +
                 "Entry_Date TEXT, " +
                 "Entry_Price REAL, " +
@@ -180,6 +180,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(ID_Product) REFERENCES " + productTable + "(ID_Product), " +
                 "FOREIGN KEY(ID_Color) REFERENCES " + colorTable + "(ID_Color), " +
                 "FOREIGN KEY(ID_Size) REFERENCES " + sizeTable + "(ID_Size))");
+    }
+
+    private void createInvoiceTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + invoiceTable + " (" +
+                "ID_Invoice INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ID_User INTEGER, " +
+                "ID_Customer INTEGER, " +
+                "Date TEXT, " +
+                "Total_Amount REAL, " +
+                "FOREIGN KEY(ID_User) REFERENCES " + userTable + "(ID_User), " +
+                "FOREIGN KEY(ID_Customer) REFERENCES " + customerTable + "(ID_Customer))");
     }
 
     private void insertAdmin(SQLiteDatabase db) {
