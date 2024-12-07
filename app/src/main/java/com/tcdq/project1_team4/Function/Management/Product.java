@@ -111,7 +111,7 @@ public class Product extends Fragment {
 
         productView.setOnItemClickListener((parent, view, position, id) -> {
             ProductModel product = productList.get(position);
-            showDialogEditProduct(product);
+            showDialogDeleteProduct(product);
         });
     }
 
@@ -149,23 +149,29 @@ public class Product extends Fragment {
 
         builder.setPositiveButton("Thêm", (dialog, which) -> {
             String name = nameField.getText().toString().trim();
-
             if (TextUtils.isEmpty(name)) {
                 Toast.makeText(getContext(), "Tên sản phẩm không được để trống!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            ProductModel newProduct = new ProductModel();
-            newProduct.setName(name);
-            newProduct.setType(productDao.getProductTypeIdByName(typeSpinner.getSelectedItem().toString()));
-            newProduct.setBrand(productDao.getBrandIdByName(brandSpinner.getSelectedItem().toString()));
+            int typeId = productDao.getProductTypeIdByName(typeSpinner.getSelectedItem().toString());
+            int brandId = productDao.getBrandIdByName(brandSpinner.getSelectedItem().toString());
 
-            ProductDao productDaoWrite = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
-            if (productDaoWrite.insertProduct(newProduct)) {
-                loadData();
-                Toast.makeText(getContext(), "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+            if (productDao.isProductExists(name, typeId, brandId)) {
+                Toast.makeText(getContext(), "Sản phẩm đã tồn tại!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "Thêm sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                ProductModel newProduct = new ProductModel();
+                newProduct.setName(name);
+                newProduct.setType(typeId);
+                newProduct.setBrand(brandId);
+
+                ProductDao productDaoWrite = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
+                if (productDaoWrite.insertProduct(newProduct)) {
+                    loadData();
+                    Toast.makeText(getContext(), "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Thêm sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -173,30 +179,27 @@ public class Product extends Fragment {
         builder.show();
     }
 
-    private void showDialogEditProduct(ProductModel product) {
+    private void showDialogDeleteProduct(ProductModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_product, null);
-        builder.setView(dialogView);
+        builder.setTitle("Xóa sản phẩm");
+        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?");
 
-        EditText nameField = dialogView.findViewById(R.id.nameProductUpdate);
-        nameField.setText(product.getName());
+        builder.setPositiveButton("Xóa", (dialog, which) -> {
+            // Kiểm tra xem sản phẩm đã được dùng trong bảng kho hàng chưa
+            ProductDao dao = new ProductDao(new DatabaseHelper(getContext()).getReadableDatabase());
+            boolean isProductUsed = dao.isProductUsedInWarehouse(product.getId());
 
-        builder.setPositiveButton("Cập nhật", (dialog, which) -> {
-            String name = nameField.getText().toString().trim();
-
-            if (TextUtils.isEmpty(name)) {
-                nameField.setError("Tên sản phẩm không được để trống!");
-                return;
-            }
-
-            product.setName(name);
-
-            ProductDao productDaoWrite = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
-            if (productDaoWrite.updateProduct(product)) {
-                loadData();
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+            if (isProductUsed) {
+                Toast.makeText(getContext(), "Không thể xóa. Sản phẩm đã được sử dụng trong kho hàng!", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                // Xóa sản phẩm
+                ProductDao productDao = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());
+                if (productDao.delete(product.getId())) {
+                    loadData();
+                    Toast.makeText(getContext(), "Xóa sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Xóa sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

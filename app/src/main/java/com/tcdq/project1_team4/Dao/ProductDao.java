@@ -60,6 +60,11 @@ public class ProductDao {
         }
     }
 
+    public boolean delete(int productId) {
+        int result = db.delete("product", "ID_Product = ?", new String[]{String.valueOf(productId)});
+        return result > 0;
+    }
+
     // Lấy danh sách sản phẩm
     public List<ProductModel> getAllProduct() {
         List<ProductModel> products = new ArrayList<>();
@@ -218,6 +223,26 @@ public class ProductDao {
             }
         }
         return count;
+    }
+
+    public boolean isProductUsedInWarehouse(int productId) {
+        String query = "SELECT COUNT(*) FROM warehouse WHERE ID_Product = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(productId)});
+        boolean isUsed = false;
+        if (cursor.moveToFirst()) {
+            isUsed = cursor.getInt(0) > 0;
+        }
+        cursor.close();
+        return isUsed;
+    }
+
+    // Kiểm tra sản phẩm đã tồn tại
+    public boolean isProductExists(String name, int typeId, int brandId) {
+        String query = "SELECT 1 FROM product WHERE Name = ? AND ID_ProductType = ? AND ID_Brand = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{name, String.valueOf(typeId), String.valueOf(brandId)});
+        boolean exists = cursor.moveToFirst(); // Trả về true nếu tìm thấy
+        cursor.close();
+        return exists;
     }
 
 }
