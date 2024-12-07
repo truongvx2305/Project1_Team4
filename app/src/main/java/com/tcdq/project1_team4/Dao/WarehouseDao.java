@@ -306,6 +306,31 @@ public class WarehouseDao {
         return result;
     }
 
+    public String[] getBrandAndTypeByProductId(int productId) {
+        String query = "SELECT " +
+                brandTable + ".Name AS BrandName, " +
+                productTypeTable + ".Name AS TypeName " +
+                "FROM " + productTable + " " +
+                "INNER JOIN " + brandTable + " ON " + productTable + ".ID_Brand = " + brandTable + ".ID_Brand " +
+                "INNER JOIN " + productTypeTable + " ON " + productTable + ".ID_ProductType = " + productTypeTable + ".ID_ProductType " +
+                "WHERE " + productTable + ".ID_Product = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(productId)});
+
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    String brand = cursor.getString(cursor.getColumnIndexOrThrow("BrandName"));
+                    String type = cursor.getString(cursor.getColumnIndexOrThrow("TypeName"));
+                    return new String[]{type, brand};
+                }
+            } finally {
+                cursor.close(); // Đảm bảo cursor luôn được đóng
+            }
+        }
+        return null;
+    }
+
     public boolean insertOrUpdateProduct(WarehouseModel warehouse) {
         if (warehouse == null) {
             Log.e("InsertOrUpdate", "Warehouse data is null.");

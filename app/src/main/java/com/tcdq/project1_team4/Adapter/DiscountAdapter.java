@@ -138,7 +138,7 @@ public class DiscountAdapter extends BaseAdapter {
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, selectedDay, selectedMonth, selectedYear) -> {
                 // Cập nhật ngày được chọn vào EditText
-                @SuppressLint("DefaultLocale") String formattedDate = String.format("%04d-%02d-%02d", selectedDay, selectedMonth + 1, selectedYear);
+                @SuppressLint("DefaultLocale") String formattedDate = String.format("%00d-%02d-%04d", selectedDay, selectedMonth + 1, selectedYear);
                 endDateField.setText(formattedDate);
             }, day, month, year);
 

@@ -29,7 +29,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_typeWarehouseAdd"
+        android:id="@+id/txv_typeWarehouseUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -62,9 +62,10 @@
         tools:ignore="HardcodedText" />
 
     <TextView
+        android:id="@+id/txv_sizeWarehouseUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
         android:text="Kích cỡ:"
         android:textColor="#000000"
@@ -72,18 +73,39 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_oldQuantityWarehouseUpdate"
+        android:id="@+id/txv_oldQuantityWarehouse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
-        android:text="Số lượng:"
+        android:text="Số lượng cũ:"
         android:textColor="#000000"
         android:textSize="14sp"
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_newQuantityWarehouseUpdate"
+        android:id="@+id/txv_oldEntryDateWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/font"
+        android:text="Ngày nhập cũ:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/txv_oldExitPriceWarehouse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/font"
+        android:text="Giá xuất cũ:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -94,7 +116,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_newQuantityWarehouseUpdate"
+        android:id="@+id/edt_newQuantityWarehouse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
@@ -106,17 +128,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/font"
-        android:text="Giá nhập:"
+        android:text="Giá nhập mới:"
         android:textColor="#000000"
         android:textSize="14sp"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_entryPriceWarehouseUpdate"
+        android:id="@+id/edt_newEntryPriceWarehouse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:hint="Nhập giá nhập"
+        android:hint="Nhập giá nhập mới"
         tools:ignore="Autofill,HardcodedText,TextFields" />
 
     <TextView
@@ -124,17 +146,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:fontFamily="@font/font"
-        android:text="Giá xuất:"
+        android:text="Giá xuất mới:"
         android:textColor="#000000"
         android:textSize="14sp"
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_exitPriceWarehouseUpdate"
+        android:id="@+id/edt_newExitPriceWarehouse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
-        android:hint="Nhập giá xuất"
+        android:hint="Nhập giá xuất mới"
         tools:ignore="Autofill,HardcodedText,TextFields" />
 
 </LinearLayout>

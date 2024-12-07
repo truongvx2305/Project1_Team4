@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String invoiceDetailTable = "invoiceDetail";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 49);
+        super(context, DATABASE_NAME, null, 50);
     }
 
     @Override
@@ -89,6 +89,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + sizeTable);
         db.execSQL("DROP TABLE IF EXISTS " + colorTable);
         db.execSQL("DROP TABLE IF EXISTS " + warehouseTable);
+        db.execSQL("DROP TABLE IF EXISTS " + invoiceTable);
+        db.execSQL("DROP TABLE IF EXISTS " + invoiceDetailTable);
 
         // Tạo lại bảng
         onCreate(db);
@@ -350,7 +352,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         warehouse.put("ID_Color", 3);
         warehouse.put("ID_Size", 4);
         warehouse.put("Quantity", 10);
-        warehouse.put("Entry_Date", "2024-12-6");
+        warehouse.put("Entry_Date", "01-12-2024");
         warehouse.put("Entry_Price", 100000);
         warehouse.put("Exit_Price", 200000);
         warehouse.put("isStill", 1);
@@ -364,7 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         warehouse.put("ID_Color", 3);
         warehouse.put("ID_Size", 3);
         warehouse.put("Quantity", 0);
-        warehouse.put("Entry_Date", "2023-12-6");
+        warehouse.put("Entry_Date", "01-12-2023");
         warehouse.put("Entry_Price", 100000);
         warehouse.put("Exit_Price", 200000);
         warehouse.put("isStill", 0);

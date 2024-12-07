@@ -34,7 +34,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tcdq.project1_team4.Adapter.WarehouseAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
+import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
+import com.tcdq.project1_team4.Model.ProductModel;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
 
@@ -288,9 +290,9 @@ public class Warehouse extends Fragment {
             newProduct.setIdColor(colorId);
             newProduct.setIdSize(sizeId);
             newProduct.setQuantity(Integer.parseInt(quantity));
+            newProduct.setEntryDate(new Date().toString());
             newProduct.setEntryPrice(Float.parseFloat(entryPrice));
             newProduct.setExitPrice(Float.parseFloat(exitPrice));
-            newProduct.setEntryDate(new Date().toString()); // Lấy ngày thêm hiện tại
             newProduct.setStill(true);
 
             if (warehouseWrite.insertOrUpdateProduct(newProduct)) {
@@ -324,52 +326,50 @@ public class Warehouse extends Fragment {
 
     private void showDialogUpdateProduct(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_warehouse, null);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_warehouse, null);
         builder.setView(dialogView);
 
-        updateImageProduct = dialogView.findViewById(R.id.warehouseImageAdd);
-        Spinner nameSpinner = dialogView.findViewById(R.id.nameProductSp);
-        TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseAdd);
-        TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseAdd);
-        Spinner colorSpinner = dialogView.findViewById(R.id.colorSp);
-        Spinner sizeSpinner = dialogView.findViewById(R.id.sizeSp);
-        EditText quantityField = dialogView.findViewById(R.id.edt_quantityWarehouseAdd);
-        EditText entryPriceField = dialogView.findViewById(R.id.edt_entryPriceWarehouseAdd);
-        EditText exitPriceField = dialogView.findViewById(R.id.edt_exitPriceWarehouseAdd);
+        updateImageProduct = dialogView.findViewById(R.id.warehouseImageUpdate);
+        TextView txvName = dialogView.findViewById(R.id.txv_nameProductUpdate);
+        TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseUpdate);
+        TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseUpdate);
+        TextView txvColor = dialogView.findViewById(R.id.txv_colorWarehouseUpdate);
+        TextView txvSize = dialogView.findViewById(R.id.txv_sizeWarehouseUpdate);
+        TextView txvOldQuantity = dialogView.findViewById(R.id.txv_oldQuantityWarehouse);
+        TextView txvOldEntryDate = dialogView.findViewById(R.id.txv_oldEntryDateWarehouse);
+        TextView txvOldExitPrice = dialogView.findViewById(R.id.txv_oldExitPriceWarehouse);
+        EditText newQuantity = dialogView.findViewById(R.id.edt_newQuantityWarehouse);
+        EditText newEntryPrice = dialogView.findViewById(R.id.edt_newEntryPriceWarehouse);
+        EditText newExitPrice = dialogView.findViewById(R.id.edt_newExitPriceWarehouse);
 
         // Hiển thị thông tin sản phẩm hiện tại
-        updateImageProduct.setImageBitmap(convertByteArrayToBitmap(product.getImage()));
-        quantityField.setText(String.valueOf(product.getQuantity()));
-        entryPriceField.setText(String.valueOf(product.getEntryPrice()));
-        exitPriceField.setText(String.valueOf(product.getExitPrice()));
+        if (product.getImage() != null) {
+            updateImageProduct.setImageBitmap(convertByteArrayToBitmap(product.getImage()));
+        } else {
+            updateImageProduct.setImageResource(R.drawable.type);
+        }
+        txvName.setText("Tên sản phẩm: " + product.getName(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
+
+        // Lấy brand và type từ productId
+        WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());
+        String[] brandAndType = warehouseDao.getBrandAndTypeByProductId(product.getIdProduct());
+        if (brandAndType != null && brandAndType.length == 2) {
+            txvType.setText("Loại sản phẩm: " + brandAndType[0]);
+            txvBrand.setText("Thương hiệu: " + brandAndType[1]);
+        } else {
+            txvType.setText("Loại sản phẩm: Không xác định");
+            txvBrand.setText("Thương hiệu: Không xác định");
+        }
+
+        txvColor.setText("Màu: " + product.getColor(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
+        txvSize.setText("Kích cỡ: " + product.getSize(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
+        txvOldQuantity.setText("Số lượng: " + String.valueOf(product.getQuantity()));
+        txvOldEntryDate.setText("Ngày nhập gần nhất: " + product.getEntryDate());
+        txvOldExitPrice.setText("Giá xuất cũ: " + String.valueOf(product.getExitPrice()) + " đ");
 
         // Cập nhật sản phẩm
         builder.setPositiveButton("Cập nhật", (dialog, which) -> {
-            String quantity = quantityField.getText().toString().trim();
-            String entryPrice = entryPriceField.getText().toString().trim();
-            String exitPrice = exitPriceField.getText().toString().trim();
-
-            if (TextUtils.isEmpty(quantity) || TextUtils.isEmpty(entryPrice) || TextUtils.isEmpty(exitPrice)) {
-                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            product.setQuantity(Integer.parseInt(quantity));
-            product.setEntryPrice(Float.parseFloat(entryPrice));
-            product.setExitPrice(Float.parseFloat(exitPrice));
-
-            if (selectedImageBitmap != null) {
-                product.setImage(convertBitmapToByteArray(selectedImageBitmap));
-            }
-
-            // Cập nhật vào cơ sở dữ liệu
-            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
-            if (warehouseDao.insertOrUpdateProduct(product)) {
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-                loadData();
-            } else {
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
-            }
+            // Thực hiện cập nhật ở đây
         });
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
