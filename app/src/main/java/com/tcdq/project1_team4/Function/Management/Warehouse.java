@@ -42,6 +42,7 @@ import com.tcdq.project1_team4.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -254,17 +255,17 @@ public class Warehouse extends Fragment {
             String selectedSize = sizeSpinner.getSelectedItem().toString();
 
             if (TextUtils.isEmpty(quantity)) {
-                Toast.makeText(getContext(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show();
+                quantityField.setError("Vui lòng nhập số lượng!");
                 return;
             }
 
             if (TextUtils.isEmpty(entryPrice)) {
-                Toast.makeText(getContext(), "Vui lòng nhập giá nhập!", Toast.LENGTH_SHORT).show();
+                entryPriceField.setError("Vui lòng nhập giá nhập!");
                 return;
             }
 
             if (TextUtils.isEmpty(exitPrice)) {
-                Toast.makeText(getContext(), "Vui lòng nhập giá xuất!", Toast.LENGTH_SHORT).show();
+                entryPriceField.setError("Vui lòng nhập giá xuất!");
                 return;
             }
 
@@ -290,7 +291,10 @@ public class Warehouse extends Fragment {
             newProduct.setIdColor(colorId);
             newProduct.setIdSize(sizeId);
             newProduct.setQuantity(Integer.parseInt(quantity));
-            newProduct.setEntryDate(new Date().toString());
+            // Lấy ngày hiện tại
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+            String currentDate = dateFormat.format(new Date());
+            newProduct.setEntryDate(currentDate);
             newProduct.setEntryPrice(Float.parseFloat(entryPrice));
             newProduct.setExitPrice(Float.parseFloat(exitPrice));
             newProduct.setStill(true);
@@ -312,7 +316,7 @@ public class Warehouse extends Fragment {
     private void showActionDialog(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Chọn hành động");
-        builder.setItems(new String[]{"Sửa", "Xóa"}, (dialog, which) -> {
+        builder.setItems(new String[]{"Nhập thêm", "Xóa"}, (dialog, which) -> {
             if (which == 0) {
                 // Sửa sản phẩm
                 showDialogUpdateProduct(product);
@@ -350,7 +354,6 @@ public class Warehouse extends Fragment {
         }
         txvName.setText("Tên sản phẩm: " + product.getName(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
 
-        // Lấy brand và type từ productId
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());
         String[] brandAndType = warehouseDao.getBrandAndTypeByProductId(product.getIdProduct());
         if (brandAndType != null && brandAndType.length == 2) {
@@ -361,15 +364,81 @@ public class Warehouse extends Fragment {
             txvBrand.setText("Thương hiệu: Không xác định");
         }
 
-        txvColor.setText("Màu: " + product.getColor(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
-        txvSize.setText("Kích cỡ: " + product.getSize(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
-        txvOldQuantity.setText("Số lượng: " + String.valueOf(product.getQuantity()));
+        txvColor.setText("Màu: " + product.getColor(warehouseDao));
+        txvSize.setText("Kích cỡ: " + product.getSize(warehouseDao));
+        txvOldQuantity.setText("Số lượng tồn kho: " + product.getQuantity());
         txvOldEntryDate.setText("Ngày nhập gần nhất: " + product.getEntryDate());
-        txvOldExitPrice.setText("Giá xuất cũ: " + String.valueOf(product.getExitPrice()) + " đ");
+        txvOldExitPrice.setText("Giá xuất: " + product.getExitPrice() + " đ");
 
         // Cập nhật sản phẩm
         builder.setPositiveButton("Cập nhật", (dialog, which) -> {
-            // Thực hiện cập nhật ở đây
+            String updatedQuantityStr = newQuantity.getText().toString().trim();
+            String updatedEntryPriceStr = newEntryPrice.getText().toString().trim();
+            String updatedExitPriceStr = newExitPrice.getText().toString().trim();
+
+            if (TextUtils.isEmpty(updatedQuantityStr) || TextUtils.isEmpty(updatedEntryPriceStr) || TextUtils.isEmpty(updatedExitPriceStr)) {
+                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Kiểm tra định dạng số lượng
+            int updatedQuantity;
+            try {
+                updatedQuantity = Integer.parseInt(updatedQuantityStr);
+                if (updatedQuantity <= 0) {
+                    Toast.makeText(getContext(), "Số lượng phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Số lượng không hợp lệ!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Kiểm tra định dạng giá nhập
+            float updatedEntryPrice;
+            try {
+                updatedEntryPrice = Float.parseFloat(updatedEntryPriceStr);
+                if (updatedEntryPrice <= 0) {
+                    Toast.makeText(getContext(), "Giá nhập phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Giá nhập không hợp lệ!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Kiểm tra định dạng giá xuất
+            float updatedExitPrice;
+            try {
+                updatedExitPrice = Float.parseFloat(updatedExitPriceStr);
+                if (updatedExitPrice <= 0) {
+                    Toast.makeText(getContext(), "Giá xuất phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Giá xuất không hợp lệ!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Cập nhật dữ liệu
+            int newTotalQuantity = product.getQuantity() + updatedQuantity;
+
+            // Lấy ngày hiện tại
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+            String currentDate = dateFormat.format(new Date());
+
+            product.setQuantity(newTotalQuantity);
+            product.setEntryDate(currentDate);
+            product.setEntryPrice(updatedEntryPrice);
+            product.setExitPrice(updatedExitPrice);
+
+            WarehouseDao writableWarehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            if (writableWarehouseDao.update(product)) {
+                Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                loadData();
+            } else {
+                Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+            }
         });
 
         builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());

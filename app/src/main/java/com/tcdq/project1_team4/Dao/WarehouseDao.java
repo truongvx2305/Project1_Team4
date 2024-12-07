@@ -51,8 +51,10 @@ public class WarehouseDao {
 
         // Tạo ContentValues để lưu trữ các giá trị cần cập nhật
         ContentValues values = new ContentValues();
-        values.put("Image", warehouse.getImage());
-        values.put("exitPrice", warehouse.getExitPrice());
+        values.put("Quantity", warehouse.getQuantity());
+        values.put("Entry_Date", warehouse.getEntryDate());
+        values.put("Entry_Price", warehouse.getEntryPrice());
+        values.put("Exit_Price", warehouse.getExitPrice());
 
         // Thực hiện câu lệnh cập nhật dữ liệu trong cơ sở dữ liệu
         int result = db.update("warehouse", values, "ID_Product = ?", new String[]{String.valueOf(warehouse.getIdProduct())});
