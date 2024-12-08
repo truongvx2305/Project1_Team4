@@ -182,7 +182,7 @@ public class Product extends Fragment {
     private void showDialogDeleteProduct(ProductModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Xóa sản phẩm");
-        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?");
+        builder.setMessage("Bạn có chắc chắn muốn sản phẩm \"" + product.getName() + "\" ?");
 
         builder.setPositiveButton("Xóa", (dialog, which) -> {
             // Kiểm tra xem sản phẩm đã được dùng trong bảng kho hàng chưa
@@ -190,7 +190,7 @@ public class Product extends Fragment {
             boolean isProductUsed = dao.isProductUsedInWarehouse(product.getId());
 
             if (isProductUsed) {
-                Toast.makeText(getContext(), "Không thể xóa. Sản phẩm đã được sử dụng trong kho hàng!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Không thể xóa. Đang được sử dụng trong kho hàng!", Toast.LENGTH_LONG).show();
             } else {
                 // Xóa sản phẩm
                 ProductDao productDao = new ProductDao(new DatabaseHelper(getContext()).getWritableDatabase());

@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/warehouseImageUpdate"
+        android:id="@+id/warehouseImageAddMore"
         android:layout_width="120dp"
         android:layout_height="126dp"
         android:layout_gravity="center"
@@ -18,7 +18,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_idProductUpdate"
+        android:id="@+id/txv_idProductAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
@@ -28,7 +28,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_nameProductUpdate"
+        android:id="@+id/txv_nameProductAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -39,7 +39,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_typeWarehouseUpdate"
+        android:id="@+id/txv_typeWarehouseAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -50,7 +50,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_brandWarehouseUpdate"
+        android:id="@+id/txv_brandWarehouseAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -61,7 +61,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_colorWarehouseUpdate"
+        android:id="@+id/txv_colorWarehouseAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -72,7 +72,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_sizeWarehouseUpdate"
+        android:id="@+id/txv_sizeWarehouseAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -83,7 +83,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_oldQuantityWarehouse"
+        android:id="@+id/txv_oldQuantityAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -94,7 +94,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_oldEntryDateWarehouse"
+        android:id="@+id/txv_oldEntryDateAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -105,7 +105,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/txv_oldExitPriceWarehouse"
+        android:id="@+id/txv_oldExitPriceAddMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -126,7 +126,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_newQuantityWarehouse"
+        android:id="@+id/edt_newQuantityAddMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
@@ -144,7 +144,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_newEntryPriceWarehouse"
+        android:id="@+id/edt_newEntryPriceAddMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"
@@ -162,7 +162,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/edt_newExitPriceWarehouse"
+        android:id="@+id/edt_newExitPriceAddMore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font"

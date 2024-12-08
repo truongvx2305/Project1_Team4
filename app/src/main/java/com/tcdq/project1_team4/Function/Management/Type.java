@@ -180,7 +180,7 @@ public class Type extends Fragment {
                     // Kiểm tra loại sản phẩm đã được dùng trong bảng sản phẩm chưa
                     int productCount = productDao.getProductCountByTypeId(type.getIdType());
                     if (productCount > 0) {
-                        Toast.makeText(getContext(), "Không thể xóa! Loại này đang được sử dụng!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Không thể xóa! Đang được sử dụng cho sản phẩm!", Toast.LENGTH_SHORT).show();
                     } else {
                         TypeDao typeDao = new TypeDao(db);
                         if (typeDao.delete(type.getIdType())) {

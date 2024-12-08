@@ -179,7 +179,7 @@ public class Brand extends Fragment {
                     // Kiểm tra loại sản phẩm đã được dùng trong bảng sản phẩm chưa
                     int productCount = productDao.getProductCountByBrandId(brand.getIdBrand());
                     if (productCount > 0) {
-                        Toast.makeText(getContext(), "Không thể xóa! Thương hiệu này đang được sử dụng!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Không thể xóa! Đang được sử dụng cho sản phẩm!", Toast.LENGTH_SHORT).show();
                     } else {
                         BrandDao brandDao = new BrandDao(db);
                         if (brandDao.delete(brand.getIdBrand())) {

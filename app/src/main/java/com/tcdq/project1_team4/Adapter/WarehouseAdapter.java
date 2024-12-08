@@ -32,6 +32,7 @@ public class WarehouseAdapter extends BaseAdapter {
     private List<WarehouseModel> warehouseList;
     private final ColorDao colorDao;
     private final SizeDao sizeDao;
+    private OnImageClickListener imageClickListener;
 
     public WarehouseAdapter(Context context, List<WarehouseModel> warehouseList) {
         this.context = context;
@@ -42,6 +43,14 @@ public class WarehouseAdapter extends BaseAdapter {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         this.colorDao = new ColorDao(db);
         this.sizeDao = new SizeDao(db);
+    }
+
+    public interface OnImageClickListener {
+        void onImageClick(WarehouseModel product, int position);
+    }
+
+    public void setOnImageClickListener(OnImageClickListener listener) {
+        this.imageClickListener = listener;
     }
 
     @Override
@@ -124,7 +133,13 @@ public class WarehouseAdapter extends BaseAdapter {
             } else {
                 // Nếu hết hàng thì không cho phép chọn
                 checkBox.setChecked(false);
-                Toast.makeText(context, "Sản phẩm đã hết hàng, không thể chọn!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Không thể chọn. Sản phẩm đã hết hàng!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imgProduct.setOnClickListener(v -> {
+            if (imageClickListener != null) {
+                imageClickListener.onImageClick(product, position);
             }
         });
 

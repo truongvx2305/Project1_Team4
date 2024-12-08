@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Model.SizeModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL */
+/**
+ * @noinspection ALL
+ */
 public class SizeDao {
     private final SQLiteDatabase db;
 
@@ -40,8 +43,8 @@ public class SizeDao {
     }
 
     // Xóa
-    public boolean delete(String name) {
-        int result = db.delete("size", "Name = ?", new String[]{name});
+    public boolean delete(int sizeId) {
+        int result = db.delete("size", "Name = ?", new String[]{String.valueOf(sizeId)});
         return result > 0;
     }
 
@@ -64,5 +67,17 @@ public class SizeDao {
         }
         cursor.close();
         return sizes;
+    }
+
+    public boolean isSizeUsedInWarehouse(int sizeId) {
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.warehouseTable + " WHERE ID_Size = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(sizeId)});
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count > 0;
+        }
+        cursor.close();
+        return false;
     }
 }

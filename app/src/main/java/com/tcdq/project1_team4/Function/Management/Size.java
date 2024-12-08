@@ -21,7 +21,9 @@ import androidx.fragment.app.Fragment;
 
 import com.tcdq.project1_team4.Adapter.SizeAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
+import com.tcdq.project1_team4.Dao.ColorDao;
 import com.tcdq.project1_team4.Dao.SizeDao;
+import com.tcdq.project1_team4.Model.ColorModel;
 import com.tcdq.project1_team4.Model.SizeModel;
 import com.tcdq.project1_team4.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -91,7 +93,7 @@ public class Size extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterSizesAndStatus(s.toString(), null);
+                filterSizesAndStatus(s.toString());
             }
 
             @Override
@@ -99,9 +101,14 @@ public class Size extends Fragment {
                 // Không xử lý
             }
         });
+
+        sizeView.setOnItemClickListener((parent, view, position, id) -> {
+            SizeModel selectedSize = sizeList.get(position);
+            showDeleteSizeDialog(selectedSize);
+        });
     }
 
-    private void filterSizesAndStatus(String query, Integer statusFilter) {
+    private void filterSizesAndStatus(String query) {
         List<SizeModel> filteredList = new ArrayList<>();
 
         // Lọc danh sách từ originalSizeList
@@ -141,7 +148,7 @@ public class Size extends Fragment {
                     SizeDao sizeDao = new SizeDao(new DatabaseHelper(getContext()).getWritableDatabase());
                     if (sizeDao.insert(newSize)) {
                         originalSizeList.add(newSize); // Cập nhật danh sách gốc
-                        filterSizesAndStatus(searchSize.getText().toString(), null); // Cập nhật hiển thị
+                        filterSizesAndStatus(searchSize.getText().toString()); // Cập nhật hiển thị
                         Toast.makeText(getContext(), "Thêm kích cỡ thành công!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     } else {
@@ -152,6 +159,28 @@ public class Size extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void showDeleteSizeDialog(SizeModel size) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+        builder.setTitle("Xóa kích cỡ");
+        builder.setMessage("Bạn có chắc chắn muốn xóa kích cỡ \"" + size.getSizeName() + "\" ?");
+        builder.setPositiveButton("Xóa", (dialog, which) -> {
+            SizeDao sizeDao = new SizeDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            if (sizeDao.isSizeUsedInWarehouse(size.getIdSize())) {
+                Toast.makeText(getContext(), "Không thể xóa. Đang được sử dụng cho sản phẩm!", Toast.LENGTH_SHORT).show();
+            } else {
+                if (sizeDao.delete(size.getIdSize())) {
+                    originalSizeList.remove(size);
+                    filterSizesAndStatus(searchSize.getText().toString());
+                    Toast.makeText(getContext(), "Xóa màu sắc thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi khi xóa màu!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     private boolean validateInput(EditText nameField, String name) {

@@ -75,6 +75,17 @@ public class WarehouseDao {
         }
     }
 
+    public boolean updateImage(WarehouseModel warehouse) {
+        if (warehouse == null || warehouse.getIdProduct() <= 0) {
+            Log.e("Update", "Dữ liệu sản phẩm không hợp lệ.");
+            return false;
+        }
+        ContentValues values = new ContentValues();
+        values.put("Image", warehouse.getImage());
+        int result = db.update("warehouse", values, "ID_Product = ?", new String[]{String.valueOf(warehouse.getIdProduct())});
+        return result > 0;
+    }
+
     public boolean delete(int productId) {
         int result = db.delete("warehouse", "ID_Product = ?", new String[]{String.valueOf(productId)});
         return result > 0;

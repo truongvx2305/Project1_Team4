@@ -57,6 +57,8 @@ public class Warehouse extends Fragment {
     private WarehouseAdapter adapter;
     private ListView warehouseView;
     private Integer currentFilterStatus = null;
+    private boolean isUpdatingImage = false;
+    private int updatingProductPosition = -1;
     /**
      * @noinspection unused
      */
@@ -67,6 +69,7 @@ public class Warehouse extends Fragment {
     private FloatingActionButton btnAddProduct;
     private CheckBox checkBox;
     private ImageView filterWarehouse;
+    private ImageView imgProductWarehouse;
     /**
      * @noinspection unused
      */
@@ -83,7 +86,26 @@ public class Warehouse extends Fragment {
                     Uri imageUri = result.getData().getData();
                     try {
                         Bitmap originalBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-                        if (updateImageProduct != null) {
+                        if (isUpdatingImage && updatingProductPosition >= 0) {
+                            // Cập nhật ảnh cho sản phẩm cụ thể
+                            WarehouseModel product = warehouseList.get(updatingProductPosition);
+
+                            // Cập nhật danh sách
+                            byte[] imageBytes = convertBitmapToByteArray(originalBitmap);
+                            product.setImage(imageBytes);
+                            adapter.notifyDataSetChanged();
+
+                            // Cập nhật vào database
+                            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(requireContext()).getWritableDatabase());
+                            warehouseDao.updateProductImage(product.getIdProduct(), imageBytes);
+
+                            Toast.makeText(requireContext(), "Ảnh sản phẩm đã được cập nhật!", Toast.LENGTH_SHORT).show();
+
+                            // Reset trạng thái
+                            isUpdatingImage = false;
+                            updatingProductPosition = -1;
+                        } else if (updateImageProduct != null) {
+                            // Xử lý thêm ảnh mới
                             updateImageProduct.post(() -> {
                                 int width = updateImageProduct.getWidth();
                                 int height = updateImageProduct.getHeight();
@@ -116,6 +138,7 @@ public class Warehouse extends Fragment {
         btnAddProduct = view.findViewById(R.id.btn_addWarehouse);
         checkBox = view.findViewById(R.id.checkBoxProductWarehouse);
         filterWarehouse = view.findViewById(R.id.filterWarehouse);
+        imgProductWarehouse = view.findViewById(R.id.imgProductWarehouse);
     }
 
     /**
@@ -175,6 +198,12 @@ public class Warehouse extends Fragment {
         });
 
         filterWarehouse.setOnClickListener(this::filterClick);
+
+        adapter.setOnImageClickListener((product, position) -> {
+            isUpdatingImage = true;
+            updatingProductPosition = position;
+            pickImageLauncher.launch(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+        });
     }
 
     private void filterProducts(String query, Integer statusFilter) {
@@ -373,22 +402,22 @@ public class Warehouse extends Fragment {
 
     private void showDialogAddMoreProduct(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_warehouse, null);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_more_warehouse, null);
         builder.setView(dialogView);
 
-        updateImageProduct = dialogView.findViewById(R.id.warehouseImageUpdate);
-        TextView txvId = dialogView.findViewById(R.id.txv_idProductUpdate);
-        TextView txvName = dialogView.findViewById(R.id.txv_nameProductUpdate);
-        TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseUpdate);
-        TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseUpdate);
-        TextView txvColor = dialogView.findViewById(R.id.txv_colorWarehouseUpdate);
-        TextView txvSize = dialogView.findViewById(R.id.txv_sizeWarehouseUpdate);
-        TextView txvOldQuantity = dialogView.findViewById(R.id.txv_oldQuantityWarehouse);
-        TextView txvOldEntryDate = dialogView.findViewById(R.id.txv_oldEntryDateWarehouse);
-        TextView txvOldExitPrice = dialogView.findViewById(R.id.txv_oldExitPriceWarehouse);
-        EditText newQuantity = dialogView.findViewById(R.id.edt_newQuantityWarehouse);
-        EditText newEntryPrice = dialogView.findViewById(R.id.edt_newEntryPriceWarehouse);
-        EditText newExitPrice = dialogView.findViewById(R.id.edt_newExitPriceWarehouse);
+        updateImageProduct = dialogView.findViewById(R.id.warehouseImageAddMore);
+        TextView txvId = dialogView.findViewById(R.id.txv_idProductAddMore);
+        TextView txvName = dialogView.findViewById(R.id.txv_nameProductAddMore);
+        TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseAddMore);
+        TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseAddMore);
+        TextView txvColor = dialogView.findViewById(R.id.txv_colorWarehouseAddMore);
+        TextView txvSize = dialogView.findViewById(R.id.txv_sizeWarehouseAddMore);
+        TextView txvOldQuantity = dialogView.findViewById(R.id.txv_oldQuantityAddMore);
+        TextView txvOldEntryDate = dialogView.findViewById(R.id.txv_oldEntryDateAddMore);
+        TextView txvOldExitPrice = dialogView.findViewById(R.id.txv_oldExitPriceAddMore);
+        EditText newQuantity = dialogView.findViewById(R.id.edt_newQuantityAddMore);
+        EditText newEntryPrice = dialogView.findViewById(R.id.edt_newEntryPriceAddMore);
+        EditText newExitPrice = dialogView.findViewById(R.id.edt_newExitPriceAddMore);
 
         // Hiển thị thông tin sản phẩm hiện tại
         if (product.getImage() != null) {
@@ -468,10 +497,10 @@ public class Warehouse extends Fragment {
 
     private void confirmDeleteProduct(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
         builder.setTitle("Xác nhận");
-        builder.setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+        builder.setMessage("Bạn có chắc chắn muốn sản phẩm \"" + product.getName(warehouseDao) + "\" ?");
         builder.setPositiveButton("Xóa", (dialog, which) -> {
-            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
             if (warehouseDao.delete(product.getIdProduct())) {
                 Toast.makeText(getContext(), "Xóa sản phẩm thành công!", Toast.LENGTH_SHORT).show();
                 loadData();

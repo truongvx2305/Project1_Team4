@@ -100,7 +100,7 @@ public class Color extends Fragment {
 
         colorView.setOnItemClickListener((parent, view, position, id) -> {
             ColorModel selectedColor = colorList.get(position);
-            showUpdateColorDialog(selectedColor);
+            showDeleteColorDialog(selectedColor);
         });
     }
 
@@ -167,38 +167,25 @@ public class Color extends Fragment {
         return true;
     }
 
-    private void showUpdateColorDialog(ColorModel color) {
+    private void showDeleteColorDialog(ColorModel color) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_color, null);
-        builder.setView(dialogView);
-
-        EditText nameField = dialogView.findViewById(R.id.nameUpdateColor);
-        nameField.setText(color.getColorName());
-
-        builder.setPositiveButton("Cập nhật", null);
-        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.setOnShowListener(dialogInterface -> {
-            Button updateButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            updateButton.setOnClickListener(v -> {
-                String newName = nameField.getText().toString().trim();
-
-                if (validateInput(nameField, newName)) {
-                    color.setColorName(newName);
-
-                    ColorDao colorDao = new ColorDao(new DatabaseHelper(getContext()).getWritableDatabase());
-                    if (colorDao.updateColor(color)) {
-                        loadData();
-                        Toast.makeText(getContext(), "Cập nhật màu sắc thành công!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    } else {
-                        Toast.makeText(getContext(), "Lỗi khi cập nhật!", Toast.LENGTH_SHORT).show();
-                    }
+        builder.setTitle("Xóa màu sắc");
+        builder.setMessage("Bạn có chắc chắn muốn xóa màu \"" + color.getColorName() + "\" ?");
+        builder.setPositiveButton("Xóa", (dialog, which) -> {
+            ColorDao colorDao = new ColorDao(new DatabaseHelper(getContext()).getWritableDatabase());
+            if (colorDao.isColorUsedInWarehouse(color.getIdColor())) {
+                Toast.makeText(getContext(), "Không thể xóa. Đang được sử dụng cho sản phẩm!", Toast.LENGTH_SHORT).show();
+            } else {
+                if (colorDao.deleteColor(color.getIdColor())) {
+                    originalColorList.remove(color);
+                    filterColorByName(searchColor.getText().toString());
+                    Toast.makeText(getContext(), "Xóa màu sắc thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi khi xóa màu!", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
         });
-
-        dialog.show();
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 }

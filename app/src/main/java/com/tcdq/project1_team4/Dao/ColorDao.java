@@ -5,12 +5,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Model.ColorModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** @noinspection ALL*/
+/**
+ * @noinspection ALL
+ */
 public class ColorDao {
     private final SQLiteDatabase db;
 
@@ -55,8 +58,8 @@ public class ColorDao {
     }
 
     // Xóa
-    public boolean deleteColor(String name) {
-        int result = db.delete("color", "Name = ?", new String[]{name});
+    public boolean deleteColor(int ID_Color) {
+        int result = db.delete("color", "ID_Color = ?", new String[]{String.valueOf(ID_Color)});
         return result > 0;
     }
 
@@ -80,4 +83,17 @@ public class ColorDao {
         cursor.close();
         return colors;
     }
+
+    public boolean isColorUsedInWarehouse(int colorId) {
+        String query = "SELECT COUNT(*) FROM " + DatabaseHelper.warehouseTable + " WHERE ID_Color = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(colorId)});
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count > 0;
+        }
+        cursor.close();
+        return false;
+    }
+
 }
