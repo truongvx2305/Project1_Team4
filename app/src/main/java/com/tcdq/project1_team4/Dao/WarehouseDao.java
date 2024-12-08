@@ -29,11 +29,11 @@ public class WarehouseDao {
     // Thêm sản phẩm
     public boolean insert(WarehouseModel warehouse) {
         ContentValues values = new ContentValues();
-        values.put("idProduct", warehouse.getIdProduct());
+        values.put("ID_Product", warehouse.getIdProduct());
         values.put("Image", warehouse.getImage());
-        values.put("idColor", warehouse.getIdColor());
-        values.put("idSize", warehouse.getIdSize());
-        values.put("quantity", warehouse.getQuantity());
+        values.put("ID_Color", warehouse.getIdColor());
+        values.put("ID_Size", warehouse.getIdSize());
+        values.put("Quantity", warehouse.getQuantity());
         values.put("Entry_Date", warehouse.getEntryDate());
         values.put("Entry_Price", warehouse.getEntryPrice());
         values.put("Exit_Price", warehouse.getExitPrice());

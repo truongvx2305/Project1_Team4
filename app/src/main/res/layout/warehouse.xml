@@ -27,7 +27,7 @@
                 android:drawableStart="@drawable/search"
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/font"
-                android:hint="Nhập mã sản phẩm"
+                android:hint="Nhập mã hoặc tên sản phẩm"
                 android:padding="10dp"
                 tools:ignore="Autofill,HardcodedText,TextFields" />
 

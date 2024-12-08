@@ -182,13 +182,15 @@ public class Warehouse extends Fragment {
         Double searchMinOrder = null;
 
         for (WarehouseModel warehouse : originalWarehouseList) {
+            WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());
             boolean matchesSearch = TextUtils.isEmpty(query)
-                    || String.valueOf(warehouse.getIdProduct()).contains(query);
+                    || String.valueOf(warehouse.getIdProduct()).contains(query)
+                    || warehouse.getName(warehouseDao).toLowerCase().contains(query.toLowerCase());
 
             boolean matchesStatus = (statusFilter == null)
                     || (statusFilter == R.id.filter_isStill_warehouse && warehouse.isStill())
                     || (statusFilter == R.id.filter_notStill_warehouse && !warehouse.isStill())
-                    || (statusFilter == R.id.filter_error_warehouse && warehouse.getQuantity() <= 5);
+                    || (statusFilter == R.id.filter_error_warehouse && warehouse.getQuantity() <= 5 && warehouse.getQuantity() > 0);
 
             if (matchesSearch && matchesStatus) {
                 filteredList.add(warehouse);
@@ -357,11 +359,11 @@ public class Warehouse extends Fragment {
     private void showActionDialog(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Chọn hành động");
-        builder.setItems(new String[]{"Nhập thêm", "Xóa"}, (dialog, which) -> {
-            if (which == 0) {
+        builder.setItems(new String[]{"Xóa", "Nhập kho"}, (dialog, which) -> {
+            if (which == 1) {
                 // Sửa sản phẩm
-                showDialogUpdateProduct(product);
-            } else if (which == 1) {
+                showDialogAddMoreProduct(product);
+            } else if (which == 0) {
                 // Xóa sản phẩm
                 confirmDeleteProduct(product);
             }
@@ -369,7 +371,7 @@ public class Warehouse extends Fragment {
         builder.show();
     }
 
-    private void showDialogUpdateProduct(WarehouseModel product) {
+    private void showDialogAddMoreProduct(WarehouseModel product) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_update_warehouse, null);
         builder.setView(dialogView);
@@ -414,7 +416,7 @@ public class Warehouse extends Fragment {
         txvOldExitPrice.setText("Giá xuất: " + product.getExitPrice() + " đ");
 
         // Cập nhật sản phẩm
-        builder.setPositiveButton("Cập nhật", (dialog, which) -> {
+        builder.setPositiveButton("Nhập kho", (dialog, which) -> {
             String updatedQuantityStr = newQuantity.getText().toString().trim();
             String updatedEntryPriceStr = newEntryPrice.getText().toString().trim();
             String updatedExitPriceStr = newExitPrice.getText().toString().trim();
@@ -449,10 +451,10 @@ public class Warehouse extends Fragment {
 
                 WarehouseDao writableWarehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
                 if (writableWarehouseDao.update(product)) {
-                    Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Nhập kho thành công!", Toast.LENGTH_SHORT).show();
                     loadData(); // Load lại dữ liệu sau khi cập nhật
                 } else {
-                    Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Nhập kho thất bại!", Toast.LENGTH_SHORT).show();
                 }
             } catch (NumberFormatException e) {
                 Toast.makeText(getContext(), "Dữ liệu không hợp lệ!", Toast.LENGTH_SHORT).show();
