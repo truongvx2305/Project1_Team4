@@ -35,11 +35,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tcdq.project1_team4.Adapter.WarehouseAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
-import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
-import com.tcdq.project1_team4.Model.DiscountModel;
-import com.tcdq.project1_team4.Model.ProductModel;
-import com.tcdq.project1_team4.Model.UserModel;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
 
@@ -398,7 +394,7 @@ public class Warehouse extends Fragment {
         } else {
             updateImageProduct.setImageResource(R.drawable.type);
         }
-        txvId.setText("ID: " + product.getIdProduct());
+        txvId.setText("Mã sản phẩm: " + product.getIdProduct());
         txvName.setText("Tên sản phẩm: " + product.getName(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
 
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());

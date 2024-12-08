@@ -2,13 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dialogEmployeeDetailLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Profile Card -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/employeeCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -33,7 +31,6 @@
 
         <!-- Employee Info -->
         <LinearLayout
-            android:id="@+id/employeeInfoContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
