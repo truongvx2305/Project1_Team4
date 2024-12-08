@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tcdq.project1_team4.Adapter.WarehouseAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
+import com.tcdq.project1_team4.Dao.UserDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
@@ -190,7 +191,12 @@ public class Warehouse extends Fragment {
             }
         });
 
-        btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
+        UserDao userDao = new UserDao(new DatabaseHelper(getContext()).getWritableDatabase());
+        if (!userDao.isAdmin(username)) {
+            btnAddProduct.setVisibility(View.GONE); // Ẩn FAB nếu không phải admin
+        } else {
+            btnAddProduct.setOnClickListener(v -> showDialogAddProduct());
+        }
 
         warehouseView.setOnItemClickListener((parent, view, position, id) -> {
             WarehouseModel product = warehouseList.get(position);
@@ -386,6 +392,11 @@ public class Warehouse extends Fragment {
     }
 
     private void showActionDialog(WarehouseModel product) {
+        UserDao userDao = new UserDao(new DatabaseHelper(getContext()).getWritableDatabase());
+        if (!userDao.isAdmin(username)) {
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Chọn hành động");
         builder.setItems(new String[]{"Xóa", "Nhập kho"}, (dialog, which) -> {
@@ -401,6 +412,11 @@ public class Warehouse extends Fragment {
     }
 
     private void showDialogAddMoreProduct(WarehouseModel product) {
+        UserDao userDao = new UserDao(new DatabaseHelper(getContext()).getWritableDatabase());
+        if (!userDao.isAdmin(username)) {
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_more_warehouse, null);
         builder.setView(dialogView);

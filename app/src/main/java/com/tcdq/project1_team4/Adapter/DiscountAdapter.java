@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.DiscountDao;
+import com.tcdq.project1_team4.Dao.UserDao;
 import com.tcdq.project1_team4.Model.DiscountModel;
 import com.tcdq.project1_team4.R;
 
@@ -33,6 +34,11 @@ import java.util.List;
 public class DiscountAdapter extends BaseAdapter {
     private final Context context;
     private final List<DiscountModel> discountList;
+    private String username;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public DiscountAdapter(Context context, List<DiscountModel> discountList) {
         this.context = context;
@@ -106,6 +112,11 @@ public class DiscountAdapter extends BaseAdapter {
     }
 
     private void showUpdateDialog(DiscountModel discount) {
+        UserDao userDao = new UserDao(new DatabaseHelper(context).getWritableDatabase());
+        if (!userDao.isAdmin(username)) {
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_update_discount, null);
         builder.setView(dialogView);

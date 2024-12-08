@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.tcdq.project1_team4.Adapter.DiscountAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.DiscountDao;
+import com.tcdq.project1_team4.Dao.UserDao;
 import com.tcdq.project1_team4.Model.DiscountModel;
 import com.tcdq.project1_team4.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -69,7 +70,12 @@ public class Discount extends Fragment {
         searchDiscount = view.findViewById(R.id.searchDiscount);
         FloatingActionButton btnAddDiscount = view.findViewById(R.id.btn_addDiscount);
 
-        btnAddDiscount.setOnClickListener(v -> showDialogAddDiscount());
+        UserDao userDao = new UserDao(new DatabaseHelper(getContext()).getWritableDatabase());
+        if (!userDao.isAdmin(username)) {
+            btnAddDiscount.setVisibility(View.GONE); // Ẩn FAB nếu không phải admin
+        } else {
+            btnAddDiscount.setOnClickListener(v -> showDialogAddDiscount());
+        }
     }
 
     private void loadData() {
@@ -85,6 +91,7 @@ public class Discount extends Fragment {
 
         adapter = new DiscountAdapter(getContext(), discountList);
         discountView.setAdapter(adapter);
+        adapter.setUsername(username);
     }
 
     private void updateDiscountValidity() {

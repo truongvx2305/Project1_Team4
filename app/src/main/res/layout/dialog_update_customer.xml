@@ -6,6 +6,19 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/nameCustomerUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Tên khách hàng:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
     <EditText
         android:id="@+id/nameUpdateCustomer"
         android:layout_width="0dp"
@@ -15,8 +28,21 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameCustomerUpdate"
         tools:ignore="Autofill,HardcodedText" />
+
+    <TextView
+        android:id="@+id/phoneCustomerUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/font"
+        android:text="Số điện thoại:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameUpdateCustomer"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/phoneUpdateCustomer"
@@ -27,7 +53,7 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameUpdateCustomer"
+        app:layout_constraintTop_toBottomOf="@id/phoneCustomerUpdate"
         tools:ignore="Autofill,HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

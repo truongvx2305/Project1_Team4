@@ -146,6 +146,18 @@ public class UserDao {
         return exists;
     }
 
+    // Kiểm tra xem người dùng có phải admin không
+    public boolean isAdmin(String username) {
+        Cursor cursor = db.rawQuery("SELECT isAdmin FROM user WHERE Username = ?", new String[]{username});
+        boolean isAdmin = false;
+        if (cursor != null && cursor.moveToFirst()) {
+            isAdmin = cursor.getInt(cursor.getColumnIndexOrThrow("isAdmin")) == 1;
+            cursor.close();
+        }
+        return isAdmin;
+    }
+
+
     // Kiểm tra Security Lock
     public boolean checkSecurityLock(String username, String securityLock) {
         Cursor cursor = db.rawQuery("SELECT 1 FROM user WHERE Username = ? AND Security_Lock = ?", new String[]{username, securityLock});
