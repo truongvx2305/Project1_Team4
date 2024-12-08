@@ -139,6 +139,4 @@ public class WarehouseModel {
     public String getName(WarehouseDao warehouseDao) {
         return warehouseDao.getNameById(this.idProduct);
     }
-
-
 }

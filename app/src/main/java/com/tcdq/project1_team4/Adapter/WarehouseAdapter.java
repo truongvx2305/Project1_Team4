@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -76,6 +77,7 @@ public class WarehouseAdapter extends BaseAdapter {
         TextView tvStatus = convertView.findViewById(R.id.statusProductWarehouse);
         ImageView errorProductWarehouse = convertView.findViewById(R.id.errorProductWarehouse);
         LinearLayout linearLayoutWarehouse = convertView.findViewById(R.id.linearLayoutWarehouse);
+        CheckBox checkBox = convertView.findViewById(R.id.checkBoxProductWarehouse);
 
         // Hiển thị thông tin sản phẩm
         byte[] imageBytes = product.getImage();
@@ -113,6 +115,18 @@ public class WarehouseAdapter extends BaseAdapter {
         } else {
             linearLayoutWarehouse.setBackgroundTintList(context.getResources().getColorStateList(R.color.white)); // Màu nền mặc định
         }
+
+        checkBox.setOnClickListener(v -> {
+            if (quantity > 0) {
+                // Chuyển đổi trạng thái của checkbox
+                boolean isChecked = checkBox.isChecked();
+                checkBox.setChecked(isChecked); // Tự động thay đổi trạng thái
+            } else {
+                // Nếu hết hàng thì không cho phép chọn
+                checkBox.setChecked(false);
+                Toast.makeText(context, "Sản phẩm đã hết hàng, không thể chọn!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return convertView;
     }

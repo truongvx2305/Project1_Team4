@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String invoiceDetailTable = "invoiceDetail";
 
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 50);
+        super(context, DATABASE_NAME, null, 55);
     }
 
     @Override
@@ -57,13 +57,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertAdmin(db);
         // Chèn dữ liệu nhân viên mẫu
         insertEmployee(db);
-        insertEmployee2(db);
         // Chèn dữ liệu khách hàng mẫu
         insertCustomer(db);
-        insertCustomer2(db);
         // Chèn dữ liệu giảm giá mẫu
         insertDiscount(db);
-        insertDiscount2(db);
         //chèn dữ liệu mẫu brand, size, color, product_type
         insertProductType(db);
         insertBrand(db);
@@ -73,7 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertProduct(db);
         //chèn dữ liệu mẫu warehouse
         insertWarehouse(db);
-        insertWarehouse2(db);
     }
 
 
@@ -212,6 +208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void insertAdmin(SQLiteDatabase db) {
         ContentValues adminUser = new ContentValues();
+        adminUser.put("ID_User", 1);
         adminUser.put("Username", "Admin");
         adminUser.put("Password", "12345678");
         adminUser.put("Name", "TCDQ");
@@ -225,6 +222,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void insertEmployee(SQLiteDatabase db) {
         ContentValues employeeUser = new ContentValues();
+        employeeUser.put("ID_User", 2);
         employeeUser.put("Username", "Employee001");
         employeeUser.put("Password", "12345678");
         employeeUser.put("Name", "Employee001");
@@ -232,12 +230,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         employeeUser.put("Phone_Number", "0987654321");
         employeeUser.put("isAdmin", 0); // 0 cho false
         employeeUser.put("isActive", 1); // 1 cho true
-
         db.insert(userTable, null, employeeUser);
-    }
 
-    private void insertEmployee2(SQLiteDatabase db) {
         ContentValues employeeUser2 = new ContentValues();
+        employeeUser2.put("ID_User", 3);
         employeeUser2.put("Username", "Employee002");
         employeeUser2.put("Password", "12345678");
         employeeUser2.put("Name", "Employee002");
@@ -245,30 +241,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         employeeUser2.put("Phone_Number", "0896745231");
         employeeUser2.put("isAdmin", 0); // 0 cho false
         employeeUser2.put("isActive", 0); // 1 cho true
-
         db.insert(userTable, null, employeeUser2);
     }
 
     private void insertCustomer(SQLiteDatabase db) {
         ContentValues customer = new ContentValues();
+        customer.put("ID_Customer", 1);
         customer.put("Name", "Customer001");
         customer.put("Phone_Number", "0123456789");
         customer.put("isVIP", 1);
-
         db.insert(customerTable, null, customer);
-    }
 
-    private void insertCustomer2(SQLiteDatabase db) {
         ContentValues customer2 = new ContentValues();
+        customer2.put("ID_Customer", 2);
         customer2.put("Name", "Customer002");
         customer2.put("Phone_Number", "019999999");
         customer2.put("isVIP", 0);
-
         db.insert(customerTable, null, customer2);
     }
 
     private void insertDiscount(SQLiteDatabase db) {
         ContentValues discount = new ContentValues();
+        discount.put("ID_Discount", 1);
         discount.put("Name", "Phiếu giảm giá 10%");
         discount.put("Discount_Price", 0.1);
         discount.put("Min_Order_Price", 1000000);
@@ -276,101 +270,115 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         discount.put("End_Date", "31-12-2024");
         discount.put("Quantity", 10);
         discount.put("isValid", 1);
-
         db.insert(discountTable, null, discount);
-    }
 
-    private void insertDiscount2(SQLiteDatabase db) {
-        ContentValues discount = new ContentValues();
-        discount.put("Name", "Phiếu giảm giá 20%");
-        discount.put("Discount_Price", 0.2);
-        discount.put("Min_Order_Price", 2000000);
-        discount.put("Start_Date", "01-11-2024");
-        discount.put("End_Date", "01-12-2024");
-        discount.put("Quantity", 10);
-        discount.put("isValid", 0);
-
-        db.insert(discountTable, null, discount);
+        ContentValues discount2 = new ContentValues();
+        discount2.put("ID_Discount", 2);
+        discount2.put("Name", "Phiếu giảm giá 20%");
+        discount2.put("Discount_Price", 0.2);
+        discount2.put("Min_Order_Price", 2000000);
+        discount2.put("Start_Date", "01-11-2024");
+        discount2.put("End_Date", "01-12-2024");
+        discount2.put("Quantity", 10);
+        discount2.put("isValid", 0);
+        db.insert(discountTable, null, discount2);
     }
 
     private void insertProductType(SQLiteDatabase db) {
         ContentValues type1 = new ContentValues();
+        type1.put("ID_ProductType", 1);
         type1.put("Name", "Áo");
         db.insert(productTypeTable, null, type1);
 
         ContentValues type2 = new ContentValues();
+        type2.put("ID_ProductType", 2);
         type2.put("Name", "Quần");
         db.insert(productTypeTable, null, type2);
     }
 
     private void insertBrand(SQLiteDatabase db) {
         ContentValues brand1 = new ContentValues();
+        brand1.put("ID_Brand", 1);
         brand1.put("Name", "Nike");
         db.insert(brandTable, null, brand1);
 
         ContentValues brand2 = new ContentValues();
+        brand2.put("ID_Brand", 2);
         brand2.put("Name", "Adidas");
         db.insert(brandTable, null, brand2);
     }
 
     private void insertSize(SQLiteDatabase db) {
-        String[] sizes = {"S", "M", "L", "XL"};
-        for (String size : sizes) {
-            ContentValues sizeValue = new ContentValues();
-            sizeValue.put("Name", size);
-            db.insert(sizeTable, null, sizeValue);
-        }
+        ContentValues sizeValue = new ContentValues();
+        sizeValue.put("ID_Size", 1);
+        sizeValue.put("Name", "S");
+        db.insert(sizeTable, null, sizeValue);
+
+        ContentValues sizeValue2 = new ContentValues();
+        sizeValue2.put("ID_Size", 2);
+        sizeValue2.put("Name", "M");
+        db.insert(sizeTable, null, sizeValue2);
+
+        ContentValues sizeValue3 = new ContentValues();
+        sizeValue3.put("ID_Size", 3);
+        sizeValue3.put("Name", "L");
+        db.insert(sizeTable, null, sizeValue3);
+
+        ContentValues sizeValue4 = new ContentValues();
+        sizeValue4.put("ID_Size", 4);
+        sizeValue4.put("Name", "XL");
+        db.insert(sizeTable, null, sizeValue4);
     }
 
     private void insertColor(SQLiteDatabase db) {
         ContentValues color1 = new ContentValues();
-        color1.put("Name", "Đỏ");
+        color1.put("ID_Color", 1);
+        color1.put("Name", "Trắng");
         db.insert(colorTable, null, color1);
 
         ContentValues color2 = new ContentValues();
-        color2.put("Name", "Xanh");
+        color2.put("ID_Color", 2);
+        color2.put("Name", "Đen");
         db.insert(colorTable, null, color2);
-
-        ContentValues color3 = new ContentValues();
-        color3.put("Name", "Trắng");
-        db.insert(colorTable, null, color3);
     }
 
     private void insertProduct(SQLiteDatabase db) {
         ContentValues product1 = new ContentValues();
+        product1.put("ID_Product", 1);
         product1.put("Name", "Áo sơ mi");
         product1.put("ID_ProductType", 1);
         product1.put("ID_Brand", 1);
+        db.insert(productTable, null, product1);
 
-        long result = db.insert(productTable, null, product1);
-        Log.d("ProductDao", "Inserted product result: " + result);
+        ContentValues product2 = new ContentValues();
+        product2.put("ID_Product", 2);
+        product2.put("Name", "Quần jean");
+        product2.put("ID_ProductType", 2);
+        product2.put("ID_Brand", 2);
+        db.insert(productTable, null, product2);
     }
 
     private void insertWarehouse(SQLiteDatabase db) {
         ContentValues warehouse = new ContentValues();
         warehouse.put("ID_Product", 1);
-        warehouse.put("ID_Color", 3);
+        warehouse.put("ID_Color", 1);
         warehouse.put("ID_Size", 4);
         warehouse.put("Quantity", 10);
         warehouse.put("Entry_Date", "01-12-2024");
         warehouse.put("Entry_Price", 100000);
         warehouse.put("Exit_Price", 200000);
         warehouse.put("isStill", 1);
-
         db.insert(warehouseTable, null, warehouse);
-    }
 
-    private void insertWarehouse2(SQLiteDatabase db) {
-        ContentValues warehouse = new ContentValues();
-        warehouse.put("ID_Product", 1);
-        warehouse.put("ID_Color", 3);
-        warehouse.put("ID_Size", 3);
-        warehouse.put("Quantity", 0);
-        warehouse.put("Entry_Date", "01-12-2023");
-        warehouse.put("Entry_Price", 100000);
-        warehouse.put("Exit_Price", 200000);
-        warehouse.put("isStill", 0);
-
-        db.insert(warehouseTable, null, warehouse);
+        ContentValues warehouse2 = new ContentValues();
+        warehouse2.put("ID_Product", 2);
+        warehouse2.put("ID_Color", 2);
+        warehouse2.put("ID_Size", 3);
+        warehouse2.put("Quantity", 0);
+        warehouse2.put("Entry_Date", "01-12-2023");
+        warehouse2.put("Entry_Price", 100000);
+        warehouse2.put("Exit_Price", 200000);
+        warehouse2.put("isStill", 0);
+        db.insert(warehouseTable, null, warehouse2);
     }
 }

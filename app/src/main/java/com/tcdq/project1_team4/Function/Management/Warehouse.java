@@ -29,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,7 +37,9 @@ import com.tcdq.project1_team4.Adapter.WarehouseAdapter;
 import com.tcdq.project1_team4.DB.DatabaseHelper;
 import com.tcdq.project1_team4.Dao.ProductDao;
 import com.tcdq.project1_team4.Dao.WarehouseDao;
+import com.tcdq.project1_team4.Model.DiscountModel;
 import com.tcdq.project1_team4.Model.ProductModel;
+import com.tcdq.project1_team4.Model.UserModel;
 import com.tcdq.project1_team4.Model.WarehouseModel;
 import com.tcdq.project1_team4.R;
 
@@ -46,6 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @noinspection ALL, unused , unused , unused , unused
@@ -55,15 +60,17 @@ public class Warehouse extends Fragment {
     private final List<WarehouseModel> warehouseList = new ArrayList<>();
     private WarehouseAdapter adapter;
     private ListView warehouseView;
-    private EditText searchWarehouse;
-    FloatingActionButton btnAddProduct;
-    CheckBox checkBox;
+    private Integer currentFilterStatus = null;
     /**
      * @noinspection unused
      */
     private TextView emptyTextView;
     private Bitmap selectedImageBitmap;
     private ImageView updateImageProduct;
+    private EditText searchWarehouse;
+    private FloatingActionButton btnAddProduct;
+    private CheckBox checkBox;
+    private ImageView filterWarehouse;
     /**
      * @noinspection unused
      */
@@ -112,6 +119,7 @@ public class Warehouse extends Fragment {
         searchWarehouse = view.findViewById(R.id.searchWarehouse);
         btnAddProduct = view.findViewById(R.id.btn_addWarehouse);
         checkBox = view.findViewById(R.id.checkBoxProductWarehouse);
+        filterWarehouse = view.findViewById(R.id.filterWarehouse);
     }
 
     /**
@@ -155,7 +163,7 @@ public class Warehouse extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterProducts(s.toString(), warehouseDao);
+                filterProducts(s.toString(), currentFilterStatus);
             }
 
             @Override
@@ -169,19 +177,52 @@ public class Warehouse extends Fragment {
             WarehouseModel product = warehouseList.get(position);
             showActionDialog(product);
         });
+
+        filterWarehouse.setOnClickListener(this::filterClick);
     }
 
-    private void filterProducts(String query, WarehouseDao warehouseDao) {
+    private void filterProducts(String query, Integer statusFilter) {
         List<WarehouseModel> filteredList = new ArrayList<>();
-        for (WarehouseModel product : originalWarehouseList) {
-            if (TextUtils.isEmpty(query) ||
-                    product.getName(warehouseDao).toLowerCase().contains(query.toLowerCase()) ||
-                    product.getColor(warehouseDao).toLowerCase().contains(query.toLowerCase()) ||
-                    product.getSize(warehouseDao).toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(product);
+        Double searchMinOrder = null;
+
+        for (WarehouseModel warehouse : originalWarehouseList) {
+            boolean matchesSearch = TextUtils.isEmpty(query)
+                    || String.valueOf(warehouse.getIdProduct()).contains(query);
+
+            boolean matchesStatus = (statusFilter == null)
+                    || (statusFilter == R.id.filter_isStill_warehouse && warehouse.isStill())
+                    || (statusFilter == R.id.filter_notStill_warehouse && !warehouse.isStill())
+                    || (statusFilter == R.id.filter_error_warehouse && warehouse.getQuantity() <= 5);
+
+            if (matchesSearch && matchesStatus) {
+                filteredList.add(warehouse);
             }
         }
+
         adapter.updateProductList(filteredList);
+    }
+
+    private void filterClick(View v) {
+        PopupMenu popupMenu = new PopupMenu(Objects.requireNonNull(getContext()), v);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_filter_warehouse, popupMenu.getMenu());
+
+        if (currentFilterStatus != null) {
+            popupMenu.getMenu().findItem(currentFilterStatus).setChecked(true);
+        }
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.filter_clear_warehouse) {
+                currentFilterStatus = null;
+                filterProducts(searchWarehouse.getText().toString(), null);
+            } else {
+                currentFilterStatus = itemId;
+                filterProducts(searchWarehouse.getText().toString(), itemId);
+            }
+            return true;
+        });
+
+        popupMenu.show();
     }
 
     /**
@@ -274,7 +315,6 @@ public class Warehouse extends Fragment {
                 return;
             }
 
-            //noinspection resource
             WarehouseDao warehouseWrite = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
             int productId = warehouseWrite.getProductIdByName(selectedName);
             int colorId = warehouseWrite.getColorIdByName(selectedColor);
@@ -285,27 +325,32 @@ public class Warehouse extends Fragment {
                 return;
             }
 
+            // Kiểm tra xem sản phẩm đã tồn tại hay chưa
+            if (warehouseWrite.checkIfProductExists(productId, colorId, sizeId)) {
+                Toast.makeText(getContext(), "Sản phẩm đã tồn tại!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             WarehouseModel newProduct = new WarehouseModel();
             newProduct.setIdProduct(productId);
             newProduct.setImage(convertBitmapToByteArray(selectedImageBitmap));
             newProduct.setIdColor(colorId);
             newProduct.setIdSize(sizeId);
             newProduct.setQuantity(Integer.parseInt(quantity));
-            // Lấy ngày hiện tại
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
             String currentDate = dateFormat.format(new Date());
             newProduct.setEntryDate(currentDate);
             newProduct.setEntryPrice(Float.parseFloat(entryPrice));
             newProduct.setExitPrice(Float.parseFloat(exitPrice));
             newProduct.setStill(true);
 
-            if (warehouseWrite.insertOrUpdateProduct(newProduct)) {
-                selectedImageBitmap = null; // Reset sau khi thêm/cập nhật thành công
+            if (warehouseWrite.insert(newProduct)) {
+                selectedImageBitmap = null;
                 loadData();
-                Toast.makeText(getContext(), "Thêm hoặc cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
             } else {
-                selectedImageBitmap = null; // Reset ngay cả khi thất bại
-                Toast.makeText(getContext(), "Thêm hoặc cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                selectedImageBitmap = null;
+                Toast.makeText(getContext(), "Thêm sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -334,6 +379,7 @@ public class Warehouse extends Fragment {
         builder.setView(dialogView);
 
         updateImageProduct = dialogView.findViewById(R.id.warehouseImageUpdate);
+        TextView txvId = dialogView.findViewById(R.id.txv_idProductUpdate);
         TextView txvName = dialogView.findViewById(R.id.txv_nameProductUpdate);
         TextView txvType = dialogView.findViewById(R.id.txv_typeWarehouseUpdate);
         TextView txvBrand = dialogView.findViewById(R.id.txv_brandWarehouseUpdate);
@@ -352,6 +398,7 @@ public class Warehouse extends Fragment {
         } else {
             updateImageProduct.setImageResource(R.drawable.type);
         }
+        txvId.setText("ID: " + product.getIdProduct());
         txvName.setText("Tên sản phẩm: " + product.getName(new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase())));
 
         WarehouseDao warehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getReadableDatabase());
@@ -381,63 +428,38 @@ public class Warehouse extends Fragment {
                 return;
             }
 
-            // Kiểm tra định dạng số lượng
-            int updatedQuantity;
             try {
-                updatedQuantity = Integer.parseInt(updatedQuantityStr);
-                if (updatedQuantity <= 0) {
-                    Toast.makeText(getContext(), "Số lượng phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
+                int updatedQuantity = Integer.parseInt(updatedQuantityStr);
+                float updatedEntryPrice = Float.parseFloat(updatedEntryPriceStr);
+                float updatedExitPrice = Float.parseFloat(updatedExitPriceStr);
+
+                if (updatedQuantity <= 0 || updatedEntryPrice <= 0 || updatedExitPrice <= 0) {
+                    Toast.makeText(getContext(), "Số lượng và giá phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), "Số lượng không hợp lệ!", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-            // Kiểm tra định dạng giá nhập
-            float updatedEntryPrice;
-            try {
-                updatedEntryPrice = Float.parseFloat(updatedEntryPriceStr);
-                if (updatedEntryPrice <= 0) {
-                    Toast.makeText(getContext(), "Giá nhập phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
-                    return;
+                // Tính tổng số lượng
+                int newTotalQuantity = product.getQuantity() + updatedQuantity;
+
+                // Lấy ngày hiện tại
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                String currentDate = dateFormat.format(new Date());
+
+                // Cập nhật thông tin sản phẩm
+                product.setQuantity(newTotalQuantity);
+                product.setEntryDate(currentDate);
+                product.setEntryPrice(updatedEntryPrice);
+                product.setExitPrice(updatedExitPrice);
+
+                WarehouseDao writableWarehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
+                if (writableWarehouseDao.update(product)) {
+                    Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                    loadData(); // Load lại dữ liệu sau khi cập nhật
+                } else {
+                    Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
                 }
             } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), "Giá nhập không hợp lệ!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Kiểm tra định dạng giá xuất
-            float updatedExitPrice;
-            try {
-                updatedExitPrice = Float.parseFloat(updatedExitPriceStr);
-                if (updatedExitPrice <= 0) {
-                    Toast.makeText(getContext(), "Giá xuất phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), "Giá xuất không hợp lệ!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Cập nhật dữ liệu
-            int newTotalQuantity = product.getQuantity() + updatedQuantity;
-
-            // Lấy ngày hiện tại
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault());
-            String currentDate = dateFormat.format(new Date());
-
-            product.setQuantity(newTotalQuantity);
-            product.setEntryDate(currentDate);
-            product.setEntryPrice(updatedEntryPrice);
-            product.setExitPrice(updatedExitPrice);
-
-            WarehouseDao writableWarehouseDao = new WarehouseDao(new DatabaseHelper(getContext()).getWritableDatabase());
-            if (writableWarehouseDao.update(product)) {
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-                loadData();
-            } else {
-                Toast.makeText(getContext(), "Cập nhật sản phẩm thất bại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Dữ liệu không hợp lệ!", Toast.LENGTH_SHORT).show();
             }
         });
 

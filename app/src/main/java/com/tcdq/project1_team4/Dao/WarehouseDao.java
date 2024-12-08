@@ -40,7 +40,7 @@ public class WarehouseDao {
         values.put("isStill", warehouse.isStill() ? 1 : 0);
 
         long result = db.insert("warehouse", null, values);
-        return false;
+        return result != -1;
     }
 
     public boolean update(WarehouseModel warehouse) {
@@ -49,12 +49,19 @@ public class WarehouseDao {
             return false;
         }
 
+        // Tính tổng số lượng mới
+        int newTotalQuantity = warehouse.getQuantity();
+
+        // Xác định trạng thái isValid (1: còn hàng, 0: hết hàng)
+        int isStill = newTotalQuantity > 0 ? 1 : 0;
+
         // Tạo ContentValues để lưu trữ các giá trị cần cập nhật
         ContentValues values = new ContentValues();
-        values.put("Quantity", warehouse.getQuantity());
+        values.put("Quantity", newTotalQuantity);
         values.put("Entry_Date", warehouse.getEntryDate());
         values.put("Entry_Price", warehouse.getEntryPrice());
         values.put("Exit_Price", warehouse.getExitPrice());
+        values.put("isStill", isStill);
 
         // Thực hiện câu lệnh cập nhật dữ liệu trong cơ sở dữ liệu
         int result = db.update("warehouse", values, "ID_Product = ?", new String[]{String.valueOf(warehouse.getIdProduct())});
@@ -415,4 +422,19 @@ public class WarehouseDao {
             }
         }
     }
+
+    public boolean checkIfProductExists(int productId, int colorId, int sizeId) {
+        Cursor cursor = db.rawQuery(
+                "SELECT 1 FROM warehouse WHERE ID_Product = ? AND ID_Color = ? AND ID_Size = ?",
+                new String[]{String.valueOf(productId), String.valueOf(colorId), String.valueOf(sizeId)});
+
+        try {
+            return cursor != null && cursor.moveToFirst();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
 }

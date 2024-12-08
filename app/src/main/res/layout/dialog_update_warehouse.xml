@@ -19,9 +19,20 @@
         tools:ignore="HardcodedText" />
 
     <TextView
+        android:id="@+id/txv_idProductUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font"
+        android:text="Mã sản phẩm:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
         android:id="@+id/txv_nameProductUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/font"
         android:text="Sản phẩm:"
         android:textColor="#000000"
