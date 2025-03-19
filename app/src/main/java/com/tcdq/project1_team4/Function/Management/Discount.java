@@ -29,6 +29,7 @@ import com.tcdq.project1_team4.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,18 +95,20 @@ public class Discount extends Fragment {
         adapter.setUsername(username);
     }
 
-    private void updateDiscountValidity() {
+    public void updateDiscountValidity() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         Date currentDate = new Date();
-
         DiscountDao discountDao = new DiscountDao(new DatabaseHelper(getContext()).getWritableDatabase());
 
         for (DiscountModel discount : discountList) {
             try {
                 Date endDate = sdf.parse(discount.getEndDate());
-                if (endDate != null && endDate.before(currentDate) && discount.isValid()) {
-                    discount.setValid(false); // Cập nhật trạng thái trong danh sách
-                    discountDao.update(discount); // Lưu trạng thái vào cơ sở dữ liệu
+                if (endDate != null) {
+                    boolean shouldBeValid = !endDate.before(currentDate);
+                    if (discount.isValid() != shouldBeValid) { // Chỉ cập nhật nếu trạng thái thay đổi
+                        discount.setValid(shouldBeValid);
+                        discountDao.update(discount);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace(); // Log lỗi nếu có
@@ -236,24 +239,34 @@ public class Discount extends Fragment {
 
     // Hiển thị DatePickerDialog
     private void showDatePickerDialog(EditText editText) {
-        // Lấy ngày hiện tại
+        // Lấy ngày hiện tại hoặc ngày trong EditText
         Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+        try {
+            Date date = sdf.parse(editText.getText().toString().trim());
+            if (date != null) {
+                calendar.setTime(date);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace(); // Nếu có lỗi parse, giữ nguyên ngày hiện tại
+        }
+
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
         // Tạo DatePickerDialog
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
-                (view, selectedDay, selectedMonth, selectedYear) -> {
-                    // Định dạng ngày và đặt vào EditText
-                    String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d",
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.getDefault(), "%02d-%02d-%04d",
                             selectedDay, selectedMonth + 1, selectedYear);
                     editText.setText(selectedDate);
-                }, day, month, year);
+                }, year, month, day);
 
-        // Hiển thị DatePickerDialog
         datePickerDialog.show();
     }
+
 
     private boolean validateDiscountInput(EditText priceField, EditText minPriceField, EditText endDateField, EditText quantityField,
                                           String price, String minPrice, String endDate, String quantityStr) {

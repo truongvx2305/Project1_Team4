@@ -44,6 +44,7 @@ public class DiscountDao {
         values.put("Min_Order_Price", discount.getMinOrderPrice());
         values.put("End_Date", discount.getEndDate());
         values.put("Quantity", discount.getQuantity());
+        values.put("isValid", discount.isValid() ? 1 : 0);
 
         int result = db.update("discount", values, "ID_Discount = ?", new String[]{String.valueOf(discount.getId())});
         return result > 0;

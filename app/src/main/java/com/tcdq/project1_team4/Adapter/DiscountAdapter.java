@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @noinspection ALL
@@ -48,6 +49,7 @@ public class DiscountAdapter extends BaseAdapter {
     public void updateList(List<DiscountModel> newList) {
         discountList.clear();
         discountList.addAll(newList);
+        updateDiscountValidity();  // Kiểm tra lại tính hợp lệ
         notifyDataSetChanged();
     }
 
@@ -149,9 +151,10 @@ public class DiscountAdapter extends BaseAdapter {
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, selectedDay, selectedMonth, selectedYear) -> {
                 // Cập nhật ngày được chọn vào EditText
-                @SuppressLint("DefaultLocale") String formattedDate = String.format("%00d-%02d-%04d", selectedDay, selectedMonth + 1, selectedYear);
+                @SuppressLint("DefaultLocale") String formattedDate = String.format("%02d-%02d-%04d", selectedYear, selectedMonth + 1, selectedDay);
                 endDateField.setText(formattedDate);
             }, day, month, year);
+
 
             datePickerDialog.show();
         });
@@ -174,6 +177,7 @@ public class DiscountAdapter extends BaseAdapter {
 
                     DiscountDao discountDao = new DiscountDao(new DatabaseHelper(context).getWritableDatabase());
                     if (discountDao.update(discount)) {
+                        updateDiscountValidity();  // Kiểm tra và cập nhật trạng thái hợp lệ
                         updateList(discountDao.getAlLDiscount());
                         Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
@@ -185,6 +189,29 @@ public class DiscountAdapter extends BaseAdapter {
         });
 
         dialog.show();
+    }
+
+    public void updateDiscountValidity() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Date currentDate = new Date();
+        DiscountDao discountDao = new DiscountDao(new DatabaseHelper(context).getWritableDatabase());
+
+        for (DiscountModel discount : discountList) {
+            try {
+                Date endDate = sdf.parse(discount.getEndDate());
+                if (endDate != null) {
+                    boolean shouldBeValid = !endDate.before(currentDate);
+                    if (discount.isValid() != shouldBeValid) {
+                        discount.setValid(shouldBeValid);
+                        discountDao.update(discount);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        notifyDataSetChanged(); // Cập nhật lại giao diện
     }
 
     private boolean validateInput(EditText minPriceField, EditText endDateField, EditText quantityField, String minPrice, String endDate, String quantity) {
